@@ -1,2 +1,3 @@
 # Abyssal
-This is a Hair/Fur Grooming Tool for VFX and Animation
+This is a 3D Software developed from scratch, to learn C++, OpenGL, OpenCL and ...
+This would be a base for Zolf Software that would be a Hair Grooming Tool.
