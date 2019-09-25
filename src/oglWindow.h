@@ -7,9 +7,10 @@
 
 // Third Party Headers
 #include <QtWidgets/QOpenGLWidget>
+#include <QtCore/QEvent>
 #include <QtGui/QKeyEvent>
 #include <QtGui/QMouseEvent>
-#include <QtCore/QPoint>
+// #include <QtCore/QPoint>
 #include <QtCore/Qt>
 
 // Our Headers
@@ -21,6 +22,8 @@ protected:
     void paintGL() override;
     void keyPressEvent(QKeyEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    bool event(QEvent *event);
 };
 
 #endif // OGLWINDOW_H
