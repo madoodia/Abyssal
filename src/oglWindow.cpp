@@ -83,29 +83,65 @@ void OGLWindow::mousePressEvent(QMouseEvent *event)
 
 bool OGLWindow::event(QEvent *event)
 {
-    if (event->type() == QEvent::KeyPress || event->type() == QEvent::MouseButtonPress)
+    QKeyEvent *ke = static_cast<QKeyEvent *>(event);
+    QMouseEvent *me = static_cast<QMouseEvent *>(event);
+
+    // if (ke->type() == QKeyEvent::KeyPress)
+    // {
+    //     printf("QKeyEvent::KeyPress!\n");
+    // }
+
+    // if (me->type() == QMouseEvent::MouseButtonPress)
+    // {
+    //     printf("QMouseEvent::MouseButtonPress!\n");
+    // }
+
+    if (ke->type() == QKeyEvent::KeyPress || me->type() == QMouseEvent::MouseButtonPress)
     {
-        QKeyEvent *ke = static_cast<QKeyEvent *>(event);
-        QMouseEvent *me = static_cast<QMouseEvent *>(event);
         if (ke->modifiers() == Qt::Modifier::ALT)
         {
-            if (me->button() == Qt::LeftButton)
+            if (me->type() == QMouseEvent::MouseButtonPress)
             {
-                printf("The viewport is Rotated!\n");
-                return true;
+                if (me->button() == Qt::LeftButton)
+                {
+                    printf("The viewport is Rotated!\n");
+                    return true;
+                }
+                if (me->button() == Qt::MidButton)
+                {
+                    printf("The viewport is Panned!\n");
+                    return true;
+                }
+                if (me->button() == Qt::RightButton)
+                {
+                    printf("The viewport is Zoomed!\n");
+                    return true;
+                }
             }
-            if (me->button() == Qt::MidButton)
+        }
+        else if (ke->modifiers() != Qt::Modifier::ALT)
+        {
+            if (me->type() == QMouseEvent::MouseButtonPress)
             {
-                printf("The viewport is Panned!\n");
-                return true;
-            }
-            if (me->button() == Qt::RightButton)
-            {
-                printf("The viewport is Zoomed!\n");
-                return true;
+                if (me->button() == Qt::LeftButton)
+                {
+                    printf("Only Left is Pressed!\n");
+                    return true;
+                }
+                if (me->button() == Qt::MidButton)
+                {
+                    printf("Only Mid is Pressed!\n");
+                    return true;
+                }
+                if (me->button() == Qt::RightButton)
+                {
+                    printf("Only Right is Pressed!\n");
+                    return true;
+                }
             }
         }
     }
+
     // if (event->type() == QEvent::KeyRelease)
     // {
     //     printf("We are in QEvent::KeyRelease!\n");
