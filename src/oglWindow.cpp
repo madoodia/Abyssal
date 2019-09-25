@@ -19,6 +19,8 @@ void OGLWindow::initializeGL()
     }
 
     printf("OpenGL version: %s\n", glGetString(GL_VERSION));
+
+    setMouseTracking(true);
 }
 
 void OGLWindow::paintGL()
@@ -50,4 +52,11 @@ void OGLWindow::keyPressEvent(QKeyEvent *event)
     {
         printf("A key is pressed!\n");
     }
+}
+
+void OGLWindow::mouseMoveEvent(QMouseEvent *event)
+{
+    float x = event->x();
+    float y = event->y();
+    printf("xPos: %f , yPos: %f\n", x, y);
 }
