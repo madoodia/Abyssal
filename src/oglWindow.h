@@ -10,7 +10,6 @@
 #include <QtCore/QEvent>
 #include <QtGui/QKeyEvent>
 #include <QtGui/QMouseEvent>
-// #include <QtCore/QPoint>
 #include <QtCore/Qt>
 
 // Our Headers

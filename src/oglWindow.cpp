@@ -15,7 +15,7 @@ void OGLWindow::initializeGL()
     if (glewInit() != GLEW_OK)
     {
         printf("Glew is not initialized!");
-        exit(-1);
+        close();
     }
 
     printf("OpenGL version: %s\n", glGetString(GL_VERSION));
@@ -86,65 +86,49 @@ bool OGLWindow::event(QEvent *event)
     QKeyEvent *ke = static_cast<QKeyEvent *>(event);
     QMouseEvent *me = static_cast<QMouseEvent *>(event);
 
-    // if (ke->type() == QKeyEvent::KeyPress)
-    // {
-    //     printf("QKeyEvent::KeyPress!\n");
-    // }
-
-    // if (me->type() == QMouseEvent::MouseButtonPress)
-    // {
-    //     printf("QMouseEvent::MouseButtonPress!\n");
-    // }
-
     if (ke->type() == QKeyEvent::KeyPress || me->type() == QMouseEvent::MouseButtonPress)
     {
         if (ke->modifiers() == Qt::Modifier::ALT)
         {
-            if (me->type() == QMouseEvent::MouseButtonPress)
+            if (me->button() == Qt::LeftButton)
             {
-                if (me->button() == Qt::LeftButton)
-                {
-                    printf("The viewport is Rotated!\n");
-                    return true;
-                }
-                if (me->button() == Qt::MidButton)
-                {
-                    printf("The viewport is Panned!\n");
-                    return true;
-                }
-                if (me->button() == Qt::RightButton)
-                {
-                    printf("The viewport is Zoomed!\n");
-                    return true;
-                }
+                printf("The viewport is Rotated!\n");
+                return true;
+            }
+            if (me->button() == Qt::MidButton)
+            {
+                printf("The viewport is Panned!\n");
+                return true;
+            }
+            if (me->button() == Qt::RightButton)
+            {
+                printf("The viewport is Zoomed!\n");
+                return true;
             }
         }
         else if (ke->modifiers() != Qt::Modifier::ALT)
         {
-            if (me->type() == QMouseEvent::MouseButtonPress)
+            if (me->button() == Qt::LeftButton)
             {
-                if (me->button() == Qt::LeftButton)
-                {
-                    printf("Only Left is Pressed!\n");
-                    return true;
-                }
-                if (me->button() == Qt::MidButton)
-                {
-                    printf("Only Mid is Pressed!\n");
-                    return true;
-                }
-                if (me->button() == Qt::RightButton)
-                {
-                    printf("Only Right is Pressed!\n");
-                    return true;
-                }
+                printf("Only Left is Pressed!\n");
+                return true;
+            }
+            if (me->button() == Qt::MidButton)
+            {
+                printf("Only Mid is Pressed!\n");
+                return true;
+            }
+            if (me->button() == Qt::RightButton)
+            {
+                printf("Only Right is Pressed!\n");
+                return true;
             }
         }
     }
 
-    // if (event->type() == QEvent::KeyRelease)
-    // {
-    //     printf("We are in QEvent::KeyRelease!\n");
-    // }
+    if (event->type() == QEvent::KeyRelease)
+    {
+        printf("We are in QEvent::KeyRelease!\n");
+    }
     return QWidget::event(event);
 }

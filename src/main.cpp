@@ -4,7 +4,7 @@
 // C++ Headers
 
 // Third Party Headers
-#include <QtWidgets/qapplication.h>
+#include <QtWidgets/QApplication>
 
 // Our Headers
 #include "oglWindow.h"
