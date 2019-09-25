@@ -60,7 +60,7 @@
     },
     "C_Cpp.dimInactiveRegions": false,
     "C_Cpp.errorSquiggles": "Disabled",
-    "C_Cpp.autocomplete": "Disable",
+    "C_Cpp.autocomplete": "Default",
     "[cpp]": {
         "editor.quickSuggestions": true
     },
