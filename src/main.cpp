@@ -19,6 +19,8 @@ int main(int argc, char *argv[])
 
     OGLWindow win;
     win.setFormat(format);
+    win.setWindowTitle("Abyssal 3D Software");
+    win.resize(600, 600);
     win.show();
 
     return app.exec();

@@ -24,7 +24,30 @@ void OGLWindow::initializeGL()
 void OGLWindow::paintGL()
 {
     glViewport(0, 0, width(), height());
-
     glClearColor(0.2f, 0.5f, 0.7f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void OGLWindow::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Escape)
+    {
+        close();
+    }
+    if (event->key() == Qt::Key_W)
+    {
+        printf("W key is pressed!\n");
+    }
+    if (event->key() == Qt::Key_S)
+    {
+        printf("S key is pressed!\n");
+    }
+    if (event->key() == Qt::Key_D)
+    {
+        printf("D key is pressed!\n");
+    }
+    if (event->key() == Qt::Key_A)
+    {
+        printf("A key is pressed!\n");
+    }
 }
