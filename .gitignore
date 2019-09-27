@@ -33,3 +33,12 @@
 
 # vscode
 .vscode/ipch
+
+# All files inside vd_maya will be ignored
+vs_workspace/*
+
+# Except these files and folders
+!vs_workspace/vs_workspace.sln
+!vs_workspace/vs_workspace.vcxproj
+!vs_workspace/vs_workspace.vcxproj.filters
+!vs_workspace/vs_workspace.vcxproj.user

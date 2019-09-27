@@ -17,12 +17,15 @@
 class OGLWindow : public QOpenGLWidget
 {
 protected:
-    void initializeGL() override;
-    void paintGL() override;
-    void keyPressEvent(QKeyEvent *event) override;
-    void mouseMoveEvent(QMouseEvent *event) override;
-    void mousePressEvent(QMouseEvent *event) override;
-    bool event(QEvent *event);
+	void initializeGL() override;
+	void paintGL() override;
+	void keyPressEvent(QKeyEvent* event) override;
+	void mouseMoveEvent(QMouseEvent* event) override;
+	void mousePressEvent(QMouseEvent* event) override;
+	bool event(QEvent* event);
+
+private:
+	uint vao, vbo, shaderProgram;
 };
 
 #endif // OGLWINDOW_H
