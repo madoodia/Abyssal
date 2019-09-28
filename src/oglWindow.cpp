@@ -43,6 +43,16 @@ void OGLWindow::initializeGL()
 		"	FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
 		"}\n";
 
+	// YelloFragment Shader
+	const char* yellowFragmentShaderSource =
+		"#version 330 core\n"
+		"out vec4 FragColor;\n"
+		"\n"
+		"void main()\n"
+		"{\n"
+		"	FragColor = vec4(0.7f, 0.7f, 0.2f, 1.0f);\n"
+		"}\n";
+
 	uint vertexShader;
 	vertexShader = glCreateShader(GL_VERTEX_SHADER);
 
@@ -73,6 +83,20 @@ void OGLWindow::initializeGL()
 		printf("ERROR::SHADER:FRAGMENT::COMPILATION_FAILED\n", infoLog);
 	}
 
+	uint yellowFragmentShader;
+	yellowFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+
+	glShaderSource(yellowFragmentShader, 1, &yellowFragmentShaderSource, NULL);
+	glCompileShader(yellowFragmentShader);
+
+	glGetShaderiv(yellowFragmentShader, GL_COMPILE_STATUS, &success);
+
+	if(!success)
+	{
+		glGetShaderInfoLog(yellowFragmentShader, sizeof(infoLog), NULL, infoLog);
+		printf("ERROR::SHADER:FRAGMENT::COMPILATION_FAILED\n", infoLog);
+	}
+
 	shaderProgram = glCreateProgram();
 
 	glAttachShader(shaderProgram, vertexShader);
@@ -95,8 +119,31 @@ void OGLWindow::initializeGL()
 		printf("ERROR::PROGRAM::VALIDATE_FAILED", infoLog);
 	}
 
+	shaderProgram2 = glCreateProgram();
+
+	glAttachShader(shaderProgram2, vertexShader);
+	glAttachShader(shaderProgram2, yellowFragmentShader);
+	glLinkProgram(shaderProgram2);
+
+	glGetProgramiv(shaderProgram2, GL_LINK_STATUS, &success);
+
+	if(!success)
+	{
+		glGetProgramInfoLog(shaderProgram2, sizeof(infoLog), NULL, infoLog);
+		printf("ERROR::PROGRAM::LINK_FAILED", infoLog);
+	}
+
+	glGetProgramiv(shaderProgram2, GL_VALIDATE_STATUS, &success);
+
+	if(!success)
+	{
+		glGetProgramInfoLog(shaderProgram2, sizeof(infoLog), NULL, infoLog);
+		printf("ERROR::PROGRAM::VALIDATE_FAILED", infoLog);
+	}
+
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
+	glDeleteShader(yellowFragmentShader);
 
 	// Vertex Data
 	float vertices1[] =
@@ -144,16 +191,12 @@ void OGLWindow::paintGL()
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	glUseProgram(shaderProgram);
-
 	glBindVertexArray(vao1);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 
+	glUseProgram(shaderProgram2);
 	glBindVertexArray(vao2);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
-	// glDrawElements(GL_LINES, 6, GL_UNSIGNED_INT, 0);
-	// glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	// glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 }
 
