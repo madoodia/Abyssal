@@ -25,7 +25,7 @@ protected:
 	bool event(QEvent* event);
 
 private:
-	uint vao, vbo, ebo, shaderProgram;
+	uint vao1, vao2, vbo1, vbo2, shaderProgram;
 };
 
 #endif // OGLWINDOW_H
