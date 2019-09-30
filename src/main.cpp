@@ -9,19 +9,19 @@
 // Our Headers
 #include "oglWindow.h"
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
-    QSurfaceFormat format = QSurfaceFormat::defaultFormat();
-    format.setVersion(3, 3);
-    format.setProfile(QSurfaceFormat::CoreProfile);
+	QSurfaceFormat format = QSurfaceFormat::defaultFormat();
+	format.setVersion(3, 3);
+	format.setProfile(QSurfaceFormat::CoreProfile);
 
-    QApplication app(argc, argv);
+	QApplication app(argc, argv);
 
-    OGLWindow win;
-    win.setFormat(format);
-    win.setWindowTitle("Abyssal 3D Software");
-    win.resize(600, 600);
-    win.show();
+	OGLWindow win;
+	win.setFormat(format);
+	win.setWindowTitle("Abyssal 3D Software");
+	win.resize(600, 600);
+	win.show();
 
-    return app.exec();
+	return app.exec();
 }

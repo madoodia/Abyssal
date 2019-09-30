@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\dummy.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\oglWindow.cpp" />
   </ItemGroup>

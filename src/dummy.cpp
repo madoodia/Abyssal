@@ -1,0 +1,1 @@
+// an empty cpp file just for Q_OBJECT building
