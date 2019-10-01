@@ -24,7 +24,7 @@ class OGLWindow : public QOpenGLWidget
 	Q_OBJECT
 
 public:
-	OGLWindow();
+	OGLWindow(QWidget* parent = 0);
 	~OGLWindow();
 protected:
 	void initializeGL() override;

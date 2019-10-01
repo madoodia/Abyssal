@@ -11,7 +11,7 @@
 // Own Headers
 #include "oglWindow.h"
 
-OGLWindow::OGLWindow()
+OGLWindow::OGLWindow(QWidget* parent)
 	: step(0.0f)
 {
 	printf("default constructor\n");
@@ -294,5 +294,6 @@ bool OGLWindow::event(QEvent* event)
 	if(event->type() == QEvent::KeyRelease) {
 		printf("We are in QEvent::KeyRelease!\n");
 	}
+
 	return QWidget::event(event);
 }
