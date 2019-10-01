@@ -11,6 +11,7 @@
 #include <QtGui/QPaintEvent>
 #include <QtGui/QKeyEvent>
 #include <QtGui/QMouseEvent>
+#include <QtGui/QCloseEvent>
 #include <QtCore/Qt>
 #include <QtCore/QTimer>
 #include <QtCore/QTime>
@@ -29,6 +30,7 @@ protected:
 	void initializeGL() override;
 	void paintGL() override;
 
+	void closeEvent(QCloseEvent* event) override;
 	void keyPressEvent(QKeyEvent* event) override;
 	void mouseMoveEvent(QMouseEvent* event) override;
 	void mousePressEvent(QMouseEvent* event) override;

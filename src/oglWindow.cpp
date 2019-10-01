@@ -196,6 +196,11 @@ void OGLWindow::paintGL()
 
 }
 
+void OGLWindow::closeEvent(QCloseEvent* event)
+{
+	printf("The widget is closing...\n");
+	return QWidget::closeEvent(event);
+}
 
 void OGLWindow::keyPressEvent(QKeyEvent* event)
 {
