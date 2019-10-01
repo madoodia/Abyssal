@@ -38,8 +38,6 @@ protected:
 
 private:
 	uint vao, vbo, ebo, shaderProgram;
-	QTimer* timer;
-	float step;
 };
 
 #endif // OGLWINDOW_H

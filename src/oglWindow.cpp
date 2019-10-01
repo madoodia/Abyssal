@@ -11,21 +11,9 @@
 // Own Headers
 #include "oglWindow.h"
 
-OGLWindow::OGLWindow(QWidget* parent)
-	: step(0.0f)
-{
-	printf("default constructor\n");
+OGLWindow::OGLWindow(QWidget* parent) {}
 
-	timer = new QTimer(this);
-	QObject::connect(timer, SIGNAL(timeout()), this, SLOT(update()));
-	timer->start(100);
-}
-
-OGLWindow::~OGLWindow()
-{
-	delete timer;
-	printf("destructor\n");
-}
+OGLWindow::~OGLWindow() {}
 
 void OGLWindow::initializeGL()
 {
@@ -179,11 +167,8 @@ void OGLWindow::initializeGL()
 void OGLWindow::paintGL()
 {
 	// Using uniforms
-	step += 0.001f;
-	printf("step: %f\n", step);
-
 	int vertexColorLocation = glGetUniformLocation(shaderProgram, "outColor");
-	glUniform4f(vertexColorLocation, 0.0f, abs(sinf(step * 180 / 3.14159265359)), 0.0f, 1.0f);
+	glUniform4f(vertexColorLocation, 0.0f, 0.6f, 0.0f, 1.0f);
 
 	glBindVertexArray(vao);
 	// glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -226,12 +211,7 @@ void OGLWindow::keyPressEvent(QKeyEvent* event)
 	if(event->key() == Qt::Key_A) {
 		printf("a key is pressed!\n");
 	}
-	if(event->key() == Qt::Key_Space) {
-		if(timer->isActive())
-			timer->stop();
-		else
-			timer->start();
-	}
+	if(event->key() == Qt::Key_Space) {}
 	// if (event->modifiers() == Qt::Modifier::ALT)
 	// {
 	//     printf("alt key is pressed!\n");
