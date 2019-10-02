@@ -9,10 +9,12 @@ PROJECT_NAME       = $(FOLDER_NAME)
 
 OBJECTS_SRC        = src/main.obj \
                      src/dummy.obj \
+                     src/shader.obj \
                      src/oglWindow.obj
 
 OBJECTS_OUT        = main.obj \
                      dummy.obj \
+                     shader.obj \
                      oglWindow.obj
 
 EXTRA_OBJS         = moc_oglWindow.obj

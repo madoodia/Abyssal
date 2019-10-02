@@ -1,11 +1,17 @@
 // madoodia@gmail.com
 // ------------------
+
 #ifndef OGLWINDOW_H
 #define OGLWINDOW_H
 
+
 // C++ Headers
+#include <stdlib.h>
+#include <cmath>
 
 // Third Party Headers
+#include <GL/glew.h>
+
 #include <QtWidgets/QOpenGLWidget>
 #include <QtCore/QEvent>
 #include <QtGui/QPaintEvent>
@@ -18,6 +24,7 @@
 #include <QtCore/QObject>
 
 // Our Headers
+#include "shader.h"
 
 class OGLWindow : public QOpenGLWidget
 {
@@ -26,6 +33,7 @@ class OGLWindow : public QOpenGLWidget
 public:
 	OGLWindow(QWidget* parent = 0);
 	~OGLWindow();
+
 protected:
 	void initializeGL() override;
 	void paintGL() override;
@@ -37,7 +45,8 @@ protected:
 	bool event(QEvent* event);
 
 private:
-	uint vao, vbo, ebo, shaderProgram;
+	unsigned int vao, vbo, ebo, shaderProgram;
+	Shader ourShaders;
 };
 
 #endif // OGLWINDOW_H

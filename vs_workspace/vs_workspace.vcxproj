@@ -22,9 +22,11 @@
     <ClCompile Include="..\src\dummy.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\oglWindow.cpp" />
+    <ClCompile Include="..\src\shader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\oglWindow.h" />
+    <ClInclude Include="..\src\shader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitignore" />
@@ -32,6 +34,8 @@
     <None Include="..\LICENSE" />
     <None Include="..\Makefile" />
     <None Include="..\README.md" />
+    <None Include="..\shaders\shader.fs" />
+    <None Include="..\shaders\shader.vs" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
