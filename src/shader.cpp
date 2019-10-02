@@ -98,6 +98,13 @@ void Shader::compile(const char* vShaderCode, const char* fShaderCode)
 
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
+
+	uniformHOffset = glGetUniformLocation(programID, "hOffset");
+}
+
+int Shader::getHOffset()
+{
+	return uniformHOffset;
 }
 
 void Shader::checkStatus(GETPOBJECTPROC objectFunc,

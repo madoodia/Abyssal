@@ -23,8 +23,11 @@ public:
 	void addShaders(const char* vShaderPath, const char* fShaderPath);
 	void use();
 
+	int getHOffset();
+
 private:
 	unsigned int programID;
+	float uniformHOffset;
 
 	typedef PFNGLGETPROGRAMIVPROC GETPOBJECTPROC;
 	typedef PFNGLGETPROGRAMINFOLOGPROC GETPOBJECTINFOLOGPROC;

@@ -74,6 +74,9 @@ void OGLWindow::initializeGL()
 void OGLWindow::paintGL()
 {
 	ourShaders.use();
+
+	int uniformHOffset = ourShaders.getHOffset();
+	glUniform1f(uniformHOffset, 0.0);
 	glBindVertexArray(vao);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 }
