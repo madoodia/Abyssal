@@ -20,22 +20,19 @@ public:
 	Shader();
 	~Shader();
 
-	void initializeShader(const char* vShaderPath, const char* fShaderPath);
-
-	void compileShader();
-	void useShader();
+	void addShaders(const char* vShaderPath, const char* fShaderPath);
+	void use();
 
 private:
 	unsigned int programID;
-
-	const char* vShaderCode;
-	const char* fShaderCode;
 
 	typedef PFNGLGETPROGRAMIVPROC GETPOBJECTPROC;
 	typedef PFNGLGETPROGRAMINFOLOGPROC GETPOBJECTINFOLOGPROC;
 
 	std::string readFile(const char* filePath);
 	std::string readFileStream(const char* filePath);
+
+	void compile(const char* vShaderCode, const char* fShaderCode);
 
 	void checkStatus(GETPOBJECTPROC objectFunc,
 		GETPOBJECTINFOLOGPROC infoLogFunc,

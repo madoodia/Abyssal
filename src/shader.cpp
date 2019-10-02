@@ -7,19 +7,19 @@
 
 // Our Headers
 #include "shader.h"
-
 Shader::Shader()
-	: programID(0), vShaderCode(""), fShaderCode("")
 {}
 
-void Shader::initializeShader(const char* vShaderPath, const char* fShaderPath)
+void Shader::addShaders(const char* vShaderPath, const char* fShaderPath)
 {
 	std::string vShader = readFileStream(vShaderPath);
 	// a different way to read from files
 	std::string fShader = readFileStream(fShaderPath);
 
-	vShaderCode = vShader.c_str();
-	fShaderCode = fShader.c_str();
+	const char* vShaderCode = vShader.c_str();
+	const char* fShaderCode = fShader.c_str();
+
+	compile(vShaderCode, fShaderCode);
 }
 
 std::string Shader::readFile(const char* filePath)
@@ -38,9 +38,9 @@ std::string Shader::readFile(const char* filePath)
 	while(!fileStream.eof())
 	{
 		std::getline(fileStream, line);
-		content.append(line + "\r\n");
+		content += "\n" + line;
 	}
-	printf("content:%s\n", content.c_str());
+
 	fileStream.close();
 
 	return content;
@@ -50,8 +50,8 @@ std::string Shader::readFileStream(const char* filePath)
 {
 	std::string content;
 
+	// 1. retrieve the vertex/fragment source code from filePath
 	std::ifstream shaderFile;
-
 	// ensure ifstream objects can throw exceptions:
 	shaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 	try
@@ -74,7 +74,7 @@ std::string Shader::readFileStream(const char* filePath)
 	return content;
 }
 
-void Shader::compileShader()
+void Shader::compile(const char* vShaderCode, const char* fShaderCode)
 {
 	unsigned int vertexShader, fragmentShader;
 
@@ -118,7 +118,7 @@ void Shader::checkStatus(GETPOBJECTPROC objectFunc,
 	}
 }
 
-void Shader::useShader()
+void Shader::use()
 {
 	glUseProgram(programID);
 }

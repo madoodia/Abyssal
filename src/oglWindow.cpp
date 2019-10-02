@@ -38,8 +38,7 @@ void OGLWindow::initializeGL()
 
 	setMouseTracking(true);
 
-	ourShaders.initializeShader("shaders/shader.vs", "shaders/shader.fs");
-	ourShaders.compileShader();
+	ourShaders.addShaders("shaders/shader.vs", "shaders/shader.fs");
 
 	glViewport(0, 0, width(), height());
 	glClearColor(0.2f, 0.3f, 0.4f, 1.0f);
@@ -74,8 +73,7 @@ void OGLWindow::initializeGL()
 
 void OGLWindow::paintGL()
 {
-	ourShaders.useShader();
-
+	ourShaders.use();
 	glBindVertexArray(vao);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 }
