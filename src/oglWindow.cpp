@@ -150,10 +150,19 @@ void OGLWindow::paintGL()
 	glm::mat4 trans(1.0f);
 	trans = glm::translate(trans, glm::vec3(0.2f, -0.2f, 0.0f));
 	trans = glm::rotate(trans, step, glm::vec3(0.0f, 0.0f, 1.0f));
-	trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 1.5f));
+	trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.5f));
 	glUniformMatrix4fv(transformLocation, 1, GL_FALSE, glm::value_ptr(trans));
 
 	glBindVertexArray(vao);
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+
+	// Transformation
+	glm::mat4 trans2(1.0f);
+	trans2 = glm::translate(trans2, glm::vec3(0.5f, -0.5f, 0.0f));
+	trans2 = glm::rotate(trans2, -step, glm::vec3(0.0f, 0.0f, 1.0f));
+	trans2 = glm::scale(trans2, glm::vec3(0.3f, 0.3f, 0.3f));
+	glUniformMatrix4fv(transformLocation, 1, GL_FALSE, glm::value_ptr(trans2));
+
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 
 	//glDeleteVertexArrays(1, &vao);
