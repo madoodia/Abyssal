@@ -25,6 +25,10 @@
 
 #include <stb_image.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 // Our Headers
 #include "shader.h"
 
@@ -50,6 +54,7 @@ protected:
 private:
 	unsigned int vao, vbo, ebo, shaderProgram;
 	unsigned int texture1, texture2;
+	unsigned int transformLocation;
 	float mixValue;
 
 	Shader ourShaders;

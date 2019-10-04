@@ -122,6 +122,15 @@ void OGLWindow::initializeGL()
 	glUniform1i(glGetUniformLocation(ourShaders.getID(), "texture1"), 0);
 	glUniform1i(glGetUniformLocation(ourShaders.getID(), "texture2"), 1);
 	glUniform1f(glGetUniformLocation(ourShaders.getID(), "mixValue"), mixValue);
+
+	// Transformation
+	glm::mat4 trans(1.0f);
+	trans = glm::translate(trans, glm::vec3(0.2f, -0.2f, 0.0f));
+	trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 1.5f));
+
+	transformLocation = glGetUniformLocation(ourShaders.getID(), "transform");
+	glUniformMatrix4fv(transformLocation, 1, GL_FALSE, glm::value_ptr(trans));
 }
 
 void OGLWindow::paintGL()

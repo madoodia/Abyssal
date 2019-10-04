@@ -96,7 +96,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SDKS_LOCATION)/OpenGL/GLEW/include;$(SDKS_LOCATION)/Qt5/include;$(SDKS_LOCATION)/OpenGL/STB;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SDKS_LOCATION)/OpenGL/GLEW/include;$(SDKS_LOCATION)/Qt5/include;$(SDKS_LOCATION)/OpenGL/STB;$(SDKS_LOCATION)/OpenGL/GLM;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;UNICODE;WIN32;_WIN64;_WINDOWS;NT_PLUGIN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -111,7 +111,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SDKS_LOCATION)/OpenGL/GLEW/include;$(SDKS_LOCATION)/Qt5/include;$(SDKS_LOCATION)/OpenGL/STB;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SDKS_LOCATION)/OpenGL/GLEW/include;$(SDKS_LOCATION)/Qt5/include;$(SDKS_LOCATION)/OpenGL/STB;$(SDKS_LOCATION)/OpenGL/GLM;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;UNICODE;WIN32;_WIN64;_WINDOWS;NT_PLUGIN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -128,7 +128,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SDKS_LOCATION)/OpenGL/GLEW/include;$(SDKS_LOCATION)/Qt5/include;$(SDKS_LOCATION)/OpenGL/STB;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SDKS_LOCATION)/OpenGL/GLEW/include;$(SDKS_LOCATION)/Qt5/include;$(SDKS_LOCATION)/OpenGL/STB;$(SDKS_LOCATION)/OpenGL/GLM;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;UNICODE;WIN32;_WIN64;_WINDOWS;NT_PLUGIN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -147,7 +147,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SDKS_LOCATION)/OpenGL/GLEW/include;$(SDKS_LOCATION)/Qt5/include;$(SDKS_LOCATION)/OpenGL/STB;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SDKS_LOCATION)/OpenGL/GLEW/include;$(SDKS_LOCATION)/Qt5/include;$(SDKS_LOCATION)/OpenGL/STB;$(SDKS_LOCATION)/OpenGL/GLM;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;UNICODE;WIN32;_WIN64;_WINDOWS;NT_PLUGIN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
