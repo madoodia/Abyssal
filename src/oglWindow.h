@@ -39,6 +39,7 @@ public:
 protected:
 	void initializeGL() override;
 	void paintGL() override;
+	//void resizeGL(int w, int h) override;
 
 	void closeEvent(QCloseEvent* event) override;
 	void keyPressEvent(QKeyEvent* event) override;
@@ -49,6 +50,7 @@ protected:
 private:
 	unsigned int vao, vbo, ebo, shaderProgram;
 	unsigned int texture1, texture2;
+	float mixValue;
 
 	Shader ourShaders;
 };

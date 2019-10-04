@@ -7,6 +7,7 @@
 #include "oglWindow.h"
 
 OGLWindow::OGLWindow(QWidget* parent)
+	:mixValue(0.2)
 {}
 
 OGLWindow::~OGLWindow()
@@ -38,19 +39,19 @@ void OGLWindow::initializeGL()
 
 	setMouseTracking(true);
 
-	ourShaders.addShaders("shaders/shader.vs", "shaders/shader.fs");
-
 	glViewport(0, 0, width(), height());
 	glClearColor(0.2f, 0.3f, 0.4f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
+
+	ourShaders.addShaders("shaders/shader.vs", "shaders/shader.fs");
 
 	// Vertex Data
 	float vertices[] =
 	{
 		// positions        // colors			// texture coords
-		0.0f,  0.5f, 0.0f,	0.0f, 0.0f, 1.0f,	0.5f, 0.5f,	  // top 
-		-0.5f, -0.5f, 0.0f,	0.0f, 1.0f, 0.0f,	0.0f, 0.0f,	  // bottom left
-		0.5f, -0.5f, 0.0f,	1.0f, 0.0f, 0.0f,	1.0f, 0.0f    // bottom right
+		0.0f,  1.0f, 0.0f,	0.0f, 0.0f, 1.0f,	0.5f, 0.5f,	  // top 
+		-1.0f, -1.0f, 0.0f,	0.0f, 1.0f, 0.0f,	0.0f, 0.0f,	  // bottom left
+		1.0f, -1.0f, 0.0f,	1.0f, 0.0f, 0.0f,	1.0f, 0.0f    // bottom right
 	};
 
 	glGenVertexArrays(1, &vao);
@@ -100,7 +101,7 @@ void OGLWindow::initializeGL()
 	glBindTexture(GL_TEXTURE_2D, texture2);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	//stbi_set_flip_vertically_on_load(true);
@@ -117,8 +118,10 @@ void OGLWindow::initializeGL()
 	stbi_image_free(data);
 
 	ourShaders.use();
+
 	glUniform1i(glGetUniformLocation(ourShaders.getID(), "texture1"), 0);
 	glUniform1i(glGetUniformLocation(ourShaders.getID(), "texture2"), 1);
+	glUniform1f(glGetUniformLocation(ourShaders.getID(), "mixValue"), mixValue);
 }
 
 void OGLWindow::paintGL()
@@ -129,12 +132,21 @@ void OGLWindow::paintGL()
 	glBindTexture(GL_TEXTURE_2D, texture2);
 
 	ourShaders.use();
+
+	glUniform1f(glGetUniformLocation(ourShaders.getID(), "mixValue"), mixValue);
+
 	glBindVertexArray(vao);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 
-	glDeleteVertexArrays(1, &vao);
-	glDeleteBuffers(1, &vbo);
+	//glDeleteVertexArrays(1, &vao);
+	//glDeleteBuffers(1, &vbo);
 }
+//
+//void OGLWindow::resizeGL(int w, int h)
+//{
+//	glViewport(0, 0, w, h);
+//	update();
+//}
 
 void OGLWindow::closeEvent(QCloseEvent* event)
 {
@@ -148,13 +160,30 @@ void OGLWindow::keyPressEvent(QKeyEvent* event)
 	{
 		close();
 	}
+	if(event->key() == Qt::Key_Up)
+	{
+		if(mixValue >= 1.0)
+			mixValue = 1.0;
+		else
+			mixValue += 0.01;
+		printf("mixValue: %f\n", mixValue);
+		update();
+	}
+	if(event->key() == Qt::Key_Down)
+	{
+		if(mixValue <= 0.0)
+			mixValue = 0.0;
+		else
+			mixValue -= 0.01;
+		printf("mixValue: %f\n", mixValue);
+		update();
+	}
 	if(event->key() == Qt::Key_W)
 	{
 		if(event->modifiers() == Qt::ShiftModifier)
 			printf("Shift+w = W\n");
 		else
 			printf("w key is pressed!\n");
-		update();
 	}
 	if(event->key() == Qt::Key_S)
 	{
@@ -178,6 +207,8 @@ void OGLWindow::keyPressEvent(QKeyEvent* event)
 	// {
 	//     printf("alt key is pressed!\n");
 	// }
+	return QWidget::keyPressEvent(event);
+
 }
 
 void OGLWindow::mouseMoveEvent(QMouseEvent* event)
