@@ -22,6 +22,7 @@ public:
 
 	void addShaders(const char* vShaderPath, const char* fShaderPath);
 	void use();
+	unsigned int getID();
 
 private:
 	unsigned int programID;

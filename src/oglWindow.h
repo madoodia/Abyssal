@@ -23,6 +23,8 @@
 #include <QtCore/QTime>
 #include <QtCore/QObject>
 
+#include <stb_image.h>
+
 // Our Headers
 #include "shader.h"
 
@@ -46,6 +48,8 @@ protected:
 
 private:
 	unsigned int vao, vbo, ebo, shaderProgram;
+	unsigned int texture1, texture2;
+
 	Shader ourShaders;
 };
 

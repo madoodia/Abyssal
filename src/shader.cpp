@@ -123,5 +123,10 @@ void Shader::use()
 	glUseProgram(programID);
 }
 
+unsigned int Shader::getID()
+{
+	return programID;
+}
+
 Shader::~Shader()
 {}

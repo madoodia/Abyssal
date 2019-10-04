@@ -23,6 +23,7 @@
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\oglWindow.cpp" />
     <ClCompile Include="..\src\shader.cpp" />
+    <ClCompile Include="..\src\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\oglWindow.h" />
@@ -95,7 +96,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SDKS_LOCATION)/OpenGL/GLEW/include;$(SDKS_LOCATION)/Qt5/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SDKS_LOCATION)/OpenGL/GLEW/include;$(SDKS_LOCATION)/Qt5/include;$(SDKS_LOCATION)/OpenGL/STB;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;UNICODE;WIN32;_WIN64;_WINDOWS;NT_PLUGIN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -110,7 +111,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SDKS_LOCATION)/OpenGL/GLEW/include;$(SDKS_LOCATION)/Qt5/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SDKS_LOCATION)/OpenGL/GLEW/include;$(SDKS_LOCATION)/Qt5/include;$(SDKS_LOCATION)/OpenGL/STB;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;UNICODE;WIN32;_WIN64;_WINDOWS;NT_PLUGIN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -127,7 +128,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SDKS_LOCATION)/OpenGL/GLEW/include;$(SDKS_LOCATION)/Qt5/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SDKS_LOCATION)/OpenGL/GLEW/include;$(SDKS_LOCATION)/Qt5/include;$(SDKS_LOCATION)/OpenGL/STB;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;UNICODE;WIN32;_WIN64;_WINDOWS;NT_PLUGIN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -146,7 +147,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SDKS_LOCATION)/OpenGL/GLEW/include;$(SDKS_LOCATION)/Qt5/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SDKS_LOCATION)/OpenGL/GLEW/include;$(SDKS_LOCATION)/Qt5/include;$(SDKS_LOCATION)/OpenGL/STB;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;UNICODE;WIN32;_WIN64;_WINDOWS;NT_PLUGIN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
