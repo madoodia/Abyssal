@@ -7,11 +7,17 @@
 #include "oglWindow.h"
 
 OGLWindow::OGLWindow(QWidget* parent)
-	:mixValue(0.2)
-{}
+	:mixValue(0.2), step(0.0f)
+{
+	timer = new QTimer(this);
+	QObject::connect(timer, SIGNAL(timeout()), this, SLOT(update()));
+	timer->start(10);
+}
 
 OGLWindow::~OGLWindow()
-{}
+{
+	delete timer;
+}
 
 void OGLWindow::initializeGL()
 {
@@ -123,18 +129,13 @@ void OGLWindow::initializeGL()
 	glUniform1i(glGetUniformLocation(ourShaders.getID(), "texture2"), 1);
 	glUniform1f(glGetUniformLocation(ourShaders.getID(), "mixValue"), mixValue);
 
-	// Transformation
-	glm::mat4 trans(1.0f);
-	trans = glm::translate(trans, glm::vec3(0.2f, -0.2f, 0.0f));
-	trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 1.5f));
-
 	transformLocation = glGetUniformLocation(ourShaders.getID(), "transform");
-	glUniformMatrix4fv(transformLocation, 1, GL_FALSE, glm::value_ptr(trans));
 }
 
 void OGLWindow::paintGL()
 {
+	step += 0.01f;
+
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture1);
 	glActiveTexture(GL_TEXTURE1);
@@ -142,7 +143,15 @@ void OGLWindow::paintGL()
 
 	ourShaders.use();
 
+
 	glUniform1f(glGetUniformLocation(ourShaders.getID(), "mixValue"), mixValue);
+
+	// Transformation
+	glm::mat4 trans(1.0f);
+	trans = glm::translate(trans, glm::vec3(0.2f, -0.2f, 0.0f));
+	trans = glm::rotate(trans, step, glm::vec3(0.0f, 0.0f, 1.0f));
+	trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 1.5f));
+	glUniformMatrix4fv(transformLocation, 1, GL_FALSE, glm::value_ptr(trans));
 
 	glBindVertexArray(vao);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -211,6 +220,10 @@ void OGLWindow::keyPressEvent(QKeyEvent* event)
 	}
 	if(event->key() == Qt::Key_Space)
 	{
+		if(timer->isActive())
+			timer->stop();
+		else
+			timer->start();
 	}
 	// if (event->modifiers() == Qt::Modifier::ALT)
 	// {

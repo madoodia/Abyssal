@@ -20,7 +20,6 @@
 #include <QtGui/QCloseEvent>
 #include <QtCore/Qt>
 #include <QtCore/QTimer>
-#include <QtCore/QTime>
 #include <QtCore/QObject>
 
 #include <stb_image.h>
@@ -55,6 +54,10 @@ private:
 	unsigned int vao, vbo, ebo, shaderProgram;
 	unsigned int texture1, texture2;
 	unsigned int transformLocation;
+
+	QTimer* timer;
+	float step;
+
 	float mixValue;
 
 	Shader ourShaders;
