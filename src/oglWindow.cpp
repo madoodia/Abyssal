@@ -7,7 +7,12 @@
 #include "oglWindow.h"
 
 OGLWindow::OGLWindow(QWidget* parent)
-	:mixValue(0.2f), xRot(0.0f), yRot(1.0f), zRot(0.0f)
+	:mixValue(0.2f),
+	xRot(0.0f), yRot(1.0f), zRot(0.0f),
+	xvRot(0.0f), yvRot(1.0f), zvRot(0.0f),
+	xPan(0.0f), yPan(0.0f), zPan(-6.0f),
+	fov(45.0f)
+
 {}
 
 OGLWindow::~OGLWindow()
@@ -170,27 +175,49 @@ void OGLWindow::paintGL()
 	ourShaders.use();
 	glUniform1f(glGetUniformLocation(ourShaders.getID(), "mixValue"), mixValue);
 
-	// Transformation
-	glm::mat4 model(1.0f);
 	glm::mat4 view(1.0f);
 	glm::mat4 projection(1.0f);
 
-	model = glm::rotate(model, glm::radians(xRot), glm::vec3(1.0f, 0.0f, 0.0f));
-	model = glm::rotate(model, glm::radians(yRot), glm::vec3(0.0f, 1.0f, 0.0f));
-	model = glm::rotate(model, glm::radians(zRot), glm::vec3(0.0f, 0.0f, 1.0f));
-	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -6.0f));
-	projection = glm::perspective(glm::radians(45.0f), (float)width() / (float)height(), 0.1f, 100.0f);
+	view = glm::translate(view, glm::vec3(xPan, yPan, zPan));
+	view = glm::rotate(view, glm::radians(xvRot), glm::vec3(1.0f, 0.0f, 0.0f));
+	view = glm::rotate(view, glm::radians(yvRot), glm::vec3(0.0f, 1.0f, 0.0f));
+	view = glm::rotate(view, glm::radians(zvRot), glm::vec3(0.0f, 0.0f, 1.0f));
+	projection = glm::perspective(glm::radians(fov), (float)width() / (float)height(), 0.1f, 100.0f);
 
 	modelLocation = glGetUniformLocation(ourShaders.getID(), "model");
 	viewLocation = glGetUniformLocation(ourShaders.getID(), "view");
 	projectionLocation = glGetUniformLocation(ourShaders.getID(), "projection");
 
-	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
 	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
 	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
 
+	glm::vec3 cubePositions[] =
+	{
+		glm::vec3(0.0f,  0.0f,  0.0f),
+		glm::vec3(2.0f,  3.0f, -9.0f),
+		glm::vec3(-1.5f, -2.2f, -2.5f),
+		glm::vec3(-3.8f, -2.0f, -12.3f),
+		glm::vec3(2.4f, -0.4f, -3.5f),
+		glm::vec3(-1.7f,  2.5f, -7.5f),
+		glm::vec3(1.3f, -2.0f, -2.5f),
+		glm::vec3(1.5f,  2.0f, -2.5f),
+		glm::vec3(1.5f,  0.2f, -1.5f),
+		glm::vec3(-1.3f,  1.0f, -1.5f)
+	};
+
 	glBindVertexArray(vao);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
+
+	for(unsigned int i = 1; i <= 10; i++)
+	{
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, cubePositions[i - 1]);
+		model = glm::rotate(model, glm::radians(xRot * i), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(yRot * i), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(zRot * i), glm::vec3(0.0f, 0.0f, 1.0f));
+		glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
+
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+	}
 }
 
 //
@@ -212,7 +239,50 @@ void OGLWindow::keyPressEvent(QKeyEvent* event)
 	{
 		close();
 	}
+	// xPan Camera
+	if(event->key() == Qt::Key_Left)
+	{
+		xPan += 0.1f;
+		update();
+	}
+	if(event->key() == Qt::Key_Right)
+	{
+		xPan -= 0.1f;
+		update();
+	}
+	// yPan Camera
 	if(event->key() == Qt::Key_Up)
+	{
+		yPan -= 0.1f;
+		update();
+	}
+	if(event->key() == Qt::Key_Down)
+	{
+		yPan += 0.1f;
+		update();
+	}
+	// zPan Camera
+	if(event->key() == Qt::Key_Period)
+	{
+		zPan += 0.1f;
+		update();
+	}
+	if(event->key() == Qt::Key_Comma)
+	{
+		zPan -= 0.1f;
+		update();
+	}
+	if(event->key() == Qt::Key_F)
+	{
+		fov += 1.0f;
+		update();
+	}
+	if(event->key() == Qt::Key_O)
+	{
+		fov -= 1.0f;
+		update();
+	}
+	if(event->key() == Qt::Key_Plus)
 	{
 		if(mixValue >= 1.0)
 			mixValue = 1.0;
@@ -221,7 +291,7 @@ void OGLWindow::keyPressEvent(QKeyEvent* event)
 		printf("mixValue: %f\n", mixValue);
 		update();
 	}
-	if(event->key() == Qt::Key_Down)
+	if(event->key() == Qt::Key_Minus)
 	{
 		if(mixValue <= 0.0)
 			mixValue = 0.0;
@@ -230,6 +300,7 @@ void OGLWindow::keyPressEvent(QKeyEvent* event)
 		printf("mixValue: %f\n", mixValue);
 		update();
 	}
+	// Model rotation
 	if(event->key() == Qt::Key_X)
 	{
 		xRot += 1.0f;
@@ -243,6 +314,22 @@ void OGLWindow::keyPressEvent(QKeyEvent* event)
 	if(event->key() == Qt::Key_Z)
 	{
 		zRot += 1.0f;
+		update();
+	}
+	// View rotation
+	if(event->key() == Qt::Key_1)
+	{
+		xvRot += 1.0f;
+		update();
+	}
+	if(event->key() == Qt::Key_2)
+	{
+		yvRot += 1.0f;
+		update();
+	}
+	if(event->key() == Qt::Key_3)
+	{
+		zvRot += 1.0f;
 		update();
 	}
 	if(event->key() == Qt::Key_W)
@@ -340,10 +427,10 @@ bool OGLWindow::event(QEvent* event)
 		}
 	}
 
-	if(event->type() == QEvent::KeyRelease)
-	{
-		printf("We are in QEvent::KeyRelease!\n");
-	}
+	//if(event->type() == QEvent::KeyRelease)
+	//{
+	//	printf("We are in QEvent::KeyRelease!\n");
+	//}
 
 	return QWidget::event(event);
 }
