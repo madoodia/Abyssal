@@ -7,17 +7,11 @@
 #include "oglWindow.h"
 
 OGLWindow::OGLWindow(QWidget* parent)
-	:mixValue(0.2), step(0.0f)
-{
-	timer = new QTimer(this);
-	QObject::connect(timer, SIGNAL(timeout()), this, SLOT(update()));
-	timer->start(10);
-}
+	:mixValue(0.2f)
+{}
 
 OGLWindow::~OGLWindow()
-{
-	delete timer;
-}
+{}
 
 void OGLWindow::initializeGL()
 {
@@ -81,7 +75,7 @@ void OGLWindow::initializeGL()
 	glBindVertexArray(0);
 
 	// load and create textures
-	int width, height, nrChannels;
+	int w, h, nrChannels;
 
 	glGenTextures(1, &texture1);
 	glBindTexture(GL_TEXTURE_2D, texture1);
@@ -91,10 +85,10 @@ void OGLWindow::initializeGL()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	//stbi_set_flip_vertically_on_load(true);
-	unsigned char* data = stbi_load("textures/container.jpg", &width, &height, &nrChannels, 0);
+	unsigned char* data = stbi_load("textures/container.jpg", &w, &h, &nrChannels, 0);
 	if(data)
 	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else
@@ -111,10 +105,10 @@ void OGLWindow::initializeGL()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	//stbi_set_flip_vertically_on_load(true);
-	data = stbi_load("textures/awesomeface.png", &width, &height, &nrChannels, 0);
+	data = stbi_load("textures/awesomeface.png", &w, &h, &nrChannels, 0);
 	if(data)
 	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else
@@ -129,45 +123,39 @@ void OGLWindow::initializeGL()
 	glUniform1i(glGetUniformLocation(ourShaders.getID(), "texture2"), 1);
 	glUniform1f(glGetUniformLocation(ourShaders.getID(), "mixValue"), mixValue);
 
-	transformLocation = glGetUniformLocation(ourShaders.getID(), "transform");
+	// Transformation
+	glm::mat4 model(1.0f);
+	glm::mat4 view(1.0f);
+	glm::mat4 projection(1.0f);
+
+	model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -6.0f));
+	projection = glm::perspective(glm::radians(45.0f), (float)width() / (float)height(), 0.1f, 100.0f);
+
+	// Projection
+	modelLocation = glGetUniformLocation(ourShaders.getID(), "model");
+	viewLocation = glGetUniformLocation(ourShaders.getID(), "view");
+	projectionLocation = glGetUniformLocation(ourShaders.getID(), "projection");
+
+	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
+	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
+	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
 }
 
 void OGLWindow::paintGL()
 {
-	step += 0.01f;
-
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture1);
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, texture2);
 
 	ourShaders.use();
-
-
 	glUniform1f(glGetUniformLocation(ourShaders.getID(), "mixValue"), mixValue);
-
-	// Transformation
-	glm::mat4 trans(1.0f);
-	trans = glm::translate(trans, glm::vec3(0.2f, -0.2f, 0.0f));
-	trans = glm::rotate(trans, step, glm::vec3(0.0f, 0.0f, 1.0f));
-	trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.5f));
-	glUniformMatrix4fv(transformLocation, 1, GL_FALSE, glm::value_ptr(trans));
 
 	glBindVertexArray(vao);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
-
-	// Transformation
-	glm::mat4 trans2(1.0f);
-	trans2 = glm::translate(trans2, glm::vec3(0.5f, -0.5f, 0.0f));
-	trans2 = glm::rotate(trans2, -step, glm::vec3(0.0f, 0.0f, 1.0f));
-	trans2 = glm::scale(trans2, glm::vec3(0.3f, 0.3f, 0.3f));
-	glUniformMatrix4fv(transformLocation, 1, GL_FALSE, glm::value_ptr(trans2));
-
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-
-	//glDeleteVertexArrays(1, &vao);
-	//glDeleteBuffers(1, &vbo);
 }
+
 //
 //void OGLWindow::resizeGL(int w, int h)
 //{
@@ -229,10 +217,6 @@ void OGLWindow::keyPressEvent(QKeyEvent* event)
 	}
 	if(event->key() == Qt::Key_Space)
 	{
-		if(timer->isActive())
-			timer->stop();
-		else
-			timer->start();
 	}
 	// if (event->modifiers() == Qt::Modifier::ALT)
 	// {

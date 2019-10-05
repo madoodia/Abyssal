@@ -53,10 +53,7 @@ protected:
 private:
 	unsigned int vao, vbo, ebo, shaderProgram;
 	unsigned int texture1, texture2;
-	unsigned int transformLocation;
-
-	QTimer* timer;
-	float step;
+	unsigned int modelLocation, projectionLocation, viewLocation;
 
 	float mixValue;
 
