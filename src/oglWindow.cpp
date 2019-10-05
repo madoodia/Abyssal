@@ -7,7 +7,7 @@
 #include "oglWindow.h"
 
 OGLWindow::OGLWindow(QWidget* parent)
-	:mixValue(0.2f)
+	:mixValue(0.2f), xRot(0.0f), yRot(1.0f), zRot(0.0f)
 {}
 
 OGLWindow::~OGLWindow()
@@ -40,18 +40,53 @@ void OGLWindow::initializeGL()
 	setMouseTracking(true);
 
 	glViewport(0, 0, width(), height());
-	glClearColor(0.2f, 0.3f, 0.4f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glEnable(GL_DEPTH_TEST);
 
 	ourShaders.addShaders("shaders/shader.vs", "shaders/shader.fs");
 
 	// Vertex Data
-	float vertices[] =
-	{
-		// positions        // colors			// texture coords
-		0.0f,  1.0f, 0.0f,	0.0f, 0.0f, 1.0f,	0.5f, 0.5f,	  // top 
-		-1.0f, -1.0f, 0.0f,	0.0f, 1.0f, 0.0f,	0.0f, 0.0f,	  // bottom left
-		1.0f, -1.0f, 0.0f,	1.0f, 0.0f, 0.0f,	1.0f, 0.0f    // bottom right
+	float vertices[] = {
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+		0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+		0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+		0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 	};
 
 	glGenVertexArrays(1, &vao);
@@ -62,14 +97,11 @@ void OGLWindow::initializeGL()
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
-
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-	glEnableVertexAttribArray(2);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
@@ -123,27 +155,13 @@ void OGLWindow::initializeGL()
 	glUniform1i(glGetUniformLocation(ourShaders.getID(), "texture2"), 1);
 	glUniform1f(glGetUniformLocation(ourShaders.getID(), "mixValue"), mixValue);
 
-	// Transformation
-	glm::mat4 model(1.0f);
-	glm::mat4 view(1.0f);
-	glm::mat4 projection(1.0f);
-
-	model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -6.0f));
-	projection = glm::perspective(glm::radians(45.0f), (float)width() / (float)height(), 0.1f, 100.0f);
-
-	// Projection
-	modelLocation = glGetUniformLocation(ourShaders.getID(), "model");
-	viewLocation = glGetUniformLocation(ourShaders.getID(), "view");
-	projectionLocation = glGetUniformLocation(ourShaders.getID(), "projection");
-
-	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
-	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
-	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
 }
 
 void OGLWindow::paintGL()
 {
+	glClearColor(0.2f, 0.3f, 0.4f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture1);
 	glActiveTexture(GL_TEXTURE1);
@@ -152,8 +170,27 @@ void OGLWindow::paintGL()
 	ourShaders.use();
 	glUniform1f(glGetUniformLocation(ourShaders.getID(), "mixValue"), mixValue);
 
+	// Transformation
+	glm::mat4 model(1.0f);
+	glm::mat4 view(1.0f);
+	glm::mat4 projection(1.0f);
+
+	model = glm::rotate(model, glm::radians(xRot), glm::vec3(1.0f, 0.0f, 0.0f));
+	model = glm::rotate(model, glm::radians(yRot), glm::vec3(0.0f, 1.0f, 0.0f));
+	model = glm::rotate(model, glm::radians(zRot), glm::vec3(0.0f, 0.0f, 1.0f));
+	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -6.0f));
+	projection = glm::perspective(glm::radians(45.0f), (float)width() / (float)height(), 0.1f, 100.0f);
+
+	modelLocation = glGetUniformLocation(ourShaders.getID(), "model");
+	viewLocation = glGetUniformLocation(ourShaders.getID(), "view");
+	projectionLocation = glGetUniformLocation(ourShaders.getID(), "projection");
+
+	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
+	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
+	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
+
 	glBindVertexArray(vao);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
 }
 
 //
@@ -191,6 +228,21 @@ void OGLWindow::keyPressEvent(QKeyEvent* event)
 		else
 			mixValue -= 0.01;
 		printf("mixValue: %f\n", mixValue);
+		update();
+	}
+	if(event->key() == Qt::Key_X)
+	{
+		xRot += 1.0f;
+		update();
+	}
+	if(event->key() == Qt::Key_Y)
+	{
+		yRot += 1.0f;
+		update();
+	}
+	if(event->key() == Qt::Key_Z)
+	{
+		zRot += 1.0f;
 		update();
 	}
 	if(event->key() == Qt::Key_W)

@@ -56,6 +56,7 @@ private:
 	unsigned int modelLocation, projectionLocation, viewLocation;
 
 	float mixValue;
+	float xRot, yRot, zRot;
 
 	Shader ourShaders;
 };
