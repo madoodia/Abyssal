@@ -10,8 +10,11 @@ OGLWindow::OGLWindow(QWidget* parent)
 	:mixValue(0.2f),
 	xRot(0.0f), yRot(1.0f), zRot(0.0f),
 	xvRot(0.0f), yvRot(1.0f), zvRot(0.0f),
-	xPan(0.0f), yPan(0.0f), zPan(-6.0f),
-	fov(45.0f)
+	xPan(0.0f), yPan(0.0f), zPan(4.0f),
+	fov(45.0f),
+	cameraSpeed(0.05f),
+	deltaTime(0.0f),
+	lastFrame(0.0f)
 
 {}
 
@@ -159,10 +162,21 @@ void OGLWindow::initializeGL()
 	glUniform1i(glGetUniformLocation(ourShaders.getID(), "texture2"), 1);
 	glUniform1f(glGetUniformLocation(ourShaders.getID(), "mixValue"), mixValue);
 
+	// Camera
+	cameraPos = glm::vec3(xPan, yPan, zPan);
+	cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+	cameraDirection = glm::normalize(cameraPos - cameraFront);
+	glm::vec3 tempUp(0.0f, 1.0f, 0.0f);
+	cameraRight = glm::normalize(glm::cross(cameraDirection, tempUp));
+	cameraUp = glm::cross(cameraDirection, cameraRight);
 }
 
 void OGLWindow::paintGL()
 {
+	//currentFrame = glfwGetTime();
+	//deltaTime = currentFrame - lastFrame;
+	//lastFrame = currentFrame;  
+
 	glClearColor(0.2f, 0.3f, 0.4f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
@@ -178,10 +192,8 @@ void OGLWindow::paintGL()
 	glm::mat4 view(1.0f);
 	glm::mat4 projection(1.0f);
 
-	view = glm::translate(view, glm::vec3(xPan, yPan, zPan));
-	view = glm::rotate(view, glm::radians(xvRot), glm::vec3(1.0f, 0.0f, 0.0f));
-	view = glm::rotate(view, glm::radians(yvRot), glm::vec3(0.0f, 1.0f, 0.0f));
-	view = glm::rotate(view, glm::radians(zvRot), glm::vec3(0.0f, 0.0f, 1.0f));
+	view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+	//view = glm::translate(view, glm::vec3(xPan, yPan, zPan));
 	projection = glm::perspective(glm::radians(fov), (float)width() / (float)height(), 0.1f, 100.0f);
 
 	modelLocation = glGetUniformLocation(ourShaders.getID(), "model");
@@ -252,23 +264,27 @@ void OGLWindow::keyPressEvent(QKeyEvent* event)
 	// xPan Camera
 	if(event->key() == Qt::Key_Left)
 	{
-		xPan += 0.1f;
+		//xPan += 0.1f;
+		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 		update();
 	}
 	if(event->key() == Qt::Key_Right)
 	{
-		xPan -= 0.1f;
+		//xPan -= 0.1f;
+		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 		update();
 	}
 	// yPan Camera
 	if(event->key() == Qt::Key_Up)
 	{
-		yPan -= 0.1f;
+		//yPan -= 0.1f;
+		cameraPos += cameraFront * cameraSpeed;
 		update();
 	}
 	if(event->key() == Qt::Key_Down)
 	{
-		yPan += 0.1f;
+		//yPan += 0.1f;
+		cameraPos -= cameraFront * cameraSpeed;
 		update();
 	}
 	// zPan Camera
