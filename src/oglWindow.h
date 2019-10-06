@@ -19,9 +19,10 @@
 #include <QtGui/QMouseEvent>
 #include <QtGui/QCloseEvent>
 #include <QtCore/Qt>
-#include <QtCore/QTimer>
+#include <QtCore/QTime>
 #include <QtCore/QObject>
 #include <QtGui/QPainter>
+#include <QtGui/qvector2d.h>
 
 #include <stb_image.h>
 
@@ -49,6 +50,7 @@ protected:
 	void keyPressEvent(QKeyEvent* event) override;
 	void mouseMoveEvent(QMouseEvent* event) override;
 	void mousePressEvent(QMouseEvent* event) override;
+	void mouseReleaseEvent(QMouseEvent* event) override;
 	bool event(QEvent* event);
 
 private:
@@ -72,6 +74,19 @@ private:
 	float deltaTime;
 	float lastFrame;
 	float currentFrame;
+
+	// mouse
+	float xPos, yPos;
+	float lastX, lastY;
+	float xOffset, yOffset;
+	float sensitivity;
+	float yaw, pitch;
+	bool firstMouse;
+
+	QVector2D mousePos;
+
+	QTime t0, t1;
+	float interval, nbFrames;
 
 	Shader ourShaders;
 };

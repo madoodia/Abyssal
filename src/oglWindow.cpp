@@ -10,13 +10,22 @@ OGLWindow::OGLWindow(QWidget* parent)
 	:mixValue(0.2f),
 	xRot(0.0f), yRot(1.0f), zRot(0.0f),
 	xvRot(0.0f), yvRot(1.0f), zvRot(0.0f),
-	xPan(0.0f), yPan(0.0f), zPan(4.0f),
+	xPan(0.0f), yPan(0.0f), zPan(-1.0f),
 	fov(45.0f),
 	cameraSpeed(0.05f),
-	deltaTime(0.0f),
-	lastFrame(0.0f)
-
-{}
+	deltaTime(0.1f),
+	lastFrame(0.0f),
+	xPos(0.0f), yPos(0.0f),
+	lastX(0.0f), lastY(0.0f),
+	xOffset(0.0f), yOffset(0.0f),
+	sensitivity(0.05f),
+	yaw(-90.0f), pitch(0.0f),
+	firstMouse(true),
+	interval(1.0f), nbFrames(100.0f)
+{
+	setMouseTracking(true);
+	t0 = QTime::currentTime();
+}
 
 OGLWindow::~OGLWindow()
 {}
@@ -44,8 +53,6 @@ void OGLWindow::initializeGL()
 	uvecn: a vector of n unsigned integers.
 	dvecn: a vector of n double components.
 	*/
-
-	setMouseTracking(true);
 
 	glViewport(0, 0, width(), height());
 
@@ -163,7 +170,7 @@ void OGLWindow::initializeGL()
 	glUniform1f(glGetUniformLocation(ourShaders.getID(), "mixValue"), mixValue);
 
 	// Camera
-	cameraPos = glm::vec3(xPan, yPan, zPan);
+	cameraPos = glm::vec3(0.0f, 0.0f, 7.0f);
 	cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 	cameraDirection = glm::normalize(cameraPos - cameraFront);
 	glm::vec3 tempUp(0.0f, 1.0f, 0.0f);
@@ -173,9 +180,15 @@ void OGLWindow::initializeGL()
 
 void OGLWindow::paintGL()
 {
-	//currentFrame = glfwGetTime();
+	t1 = QTime::currentTime();
+	float theoric = 0.001 * interval * nbFrames;
+	float measured = 0.001 * t0.msecsTo(t1);
+	float diff = (measured - theoric);
+	deltaTime = diff / measured;
+
+	//printf("CurrentTime: %f\n", currentFrame);
 	//deltaTime = currentFrame - lastFrame;
-	//lastFrame = currentFrame;  
+	//lastFrame = currentFrame;
 
 	glClearColor(0.2f, 0.3f, 0.4f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -192,8 +205,18 @@ void OGLWindow::paintGL()
 	glm::mat4 view(1.0f);
 	glm::mat4 projection(1.0f);
 
+	//glm::vec3 front;
+	//front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+	//front.y = sin(glm::radians(pitch));
+	//front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+	//cameraFront = glm::normalize(front);
+
 	view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
-	//view = glm::translate(view, glm::vec3(xPan, yPan, zPan));
+	view = glm::translate(view, glm::vec3(xPan, yPan, 0.0f));
+	view = glm::translate(view, glm::vec3(0.0f, 0.0f, zPan));
+	view = glm::rotate(view, glm::radians(xvRot), glm::vec3(1.0f, 0.0f, 0.0f));
+	view = glm::rotate(view, glm::radians(yvRot), glm::vec3(0.0f, 1.0f, 0.0f));
+
 	projection = glm::perspective(glm::radians(fov), (float)width() / (float)height(), 0.1f, 100.0f);
 
 	modelLocation = glGetUniformLocation(ourShaders.getID(), "model");
@@ -391,21 +414,81 @@ void OGLWindow::keyPressEvent(QKeyEvent* event)
 
 }
 
-void OGLWindow::mouseMoveEvent(QMouseEvent* event)
-{
-	// float x = event->x();
-	// float y = event->y();
-	// printf("xPos: %f , yPos: %f\n", x, y);
-}
-
 void OGLWindow::mousePressEvent(QMouseEvent* event)
 {
-	// if (event->button() == Qt::LeftButton)
-	//     printf("Left Button Mouse is Pressed!\n");
-	// if (event->button() == Qt::MidButton)
-	//     printf("Mid Button Mouse is Pressed!\n");
-	// if (event->button() == Qt::RightButton)
-	//     printf("Right Button Mouse is Pressed!\n");
+	QEvent* e = static_cast<QEvent*>(event);
+	QKeyEvent* ke = static_cast<QKeyEvent*>(e);
+
+	if(ke->modifiers() == Qt::Modifier::ALT)
+	{
+		if(event->buttons())
+		{
+			mousePos = QVector2D(event->localPos());
+		}
+	}
+}
+
+void OGLWindow::mouseMoveEvent(QMouseEvent* event)
+{
+	QEvent* e = static_cast<QEvent*>(event);
+	QKeyEvent* ke = static_cast<QKeyEvent*>(e);
+
+	QVector2D diff = QVector2D(event->localPos()) - mousePos;
+	if(ke->modifiers() == Qt::Modifier::ALT)
+	{
+		if(event->buttons() & Qt::LeftButton)
+		{
+			xPos = diff.x();
+			yPos = diff.y();
+
+			xOffset = xPos - lastX;
+			yOffset = yPos - lastY;
+
+			xvRot -= yOffset;
+			yvRot -= xOffset;
+
+			mousePos = QVector2D(event->pos());
+			xPos = mousePos.x();
+			yPos = mousePos.y();
+
+			update();
+		}
+		if(event->buttons() & Qt::MidButton)
+		{
+			xPos = diff.x();
+			yPos = diff.y();
+
+			xOffset = xPos - lastX;
+			yOffset = yPos - lastY;
+			xOffset *= sensitivity;
+			yOffset *= sensitivity;
+			xPan -= xOffset;
+			yPan += yOffset;
+
+			mousePos = QVector2D(event->pos());
+			xPos = mousePos.x();
+			yPos = mousePos.y();
+			update();
+		}
+		if(event->buttons() & Qt::RightButton)
+		{
+			xPos = diff.x();
+			yPos = diff.y();
+
+			xOffset = xPos - lastX;
+			xOffset *= sensitivity;
+			zPan += xOffset;
+
+			mousePos = QVector2D(event->pos());
+			xPos = mousePos.x();
+			update();
+		}
+	}
+}
+
+void OGLWindow::mouseReleaseEvent(QMouseEvent* event)
+{
+
 }
 
 bool OGLWindow::event(QEvent* event)
@@ -413,45 +496,75 @@ bool OGLWindow::event(QEvent* event)
 	QKeyEvent* ke = static_cast<QKeyEvent*>(event);
 	QMouseEvent* me = static_cast<QMouseEvent*>(event);
 
-	if(ke->type() == QKeyEvent::KeyPress || me->type() == QMouseEvent::MouseButtonPress)
-	{
-		if(ke->modifiers() == Qt::Modifier::ALT)
-		{
-			if(me->button() == Qt::LeftButton)
-			{
-				printf("The viewport is Rotated!\n");
-				return true;
-			}
-			if(me->button() == Qt::MidButton)
-			{
-				printf("The viewport is Panned!\n");
-				return true;
-			}
-			if(me->button() == Qt::RightButton)
-			{
-				printf("The viewport is Zoomed!\n");
-				return true;
-			}
-		}
-		else if(ke->modifiers() != Qt::Modifier::ALT)
-		{
-			if(me->button() == Qt::LeftButton)
-			{
-				printf("Only Left is Pressed!\n");
-				return true;
-			}
-			if(me->button() == Qt::MidButton)
-			{
-				printf("Only Mid is Pressed!\n");
-				return true;
-			}
-			if(me->button() == Qt::RightButton)
-			{
-				printf("Only Right is Pressed!\n");
-				return true;
-			}
-		}
-	}
+	//if(ke->type() == QKeyEvent::KeyPress || me->type() == QMouseEvent::MouseButtonPress || me->type() == QMouseEvent::MouseMove)
+	//{
+	//	if(ke->modifiers() == Qt::Modifier::ALT)
+	//	{
+	//		if(me->buttons() & Qt::LeftButton)
+	//		{
+	//			if(firstMouse)
+	//			{
+	//				lastX = xPos;
+	//				lastY = yPos;
+	//				firstMouse = false;
+	//			}
+	//			xPos = me->localPos().x();
+	//			yPos = me->localPos().y();
+
+	//			xOffset = xPos - lastX;
+	//			yOffset = lastY - yPos;
+
+	//			lastX = xPos;
+	//			lastY = yPos;
+
+	//			xOffset *= sensitivity;
+	//			yOffset *= sensitivity;
+
+	//			yaw += xOffset;
+	//			pitch += yOffset;
+
+	//			printf("xOffset: %f, yOffset: %f\n", xOffset, yOffset);
+	//			printf("yaw: %f, pitch: %f\n", yaw, pitch);
+
+	//			if(pitch > 89.0f)
+	//				pitch = 89.0f;
+	//			if(pitch < -89.0f)
+	//				pitch = -89.0f;
+
+	//			update();
+	//			return true;
+	//		}
+	//		if(me->buttons() & Qt::MidButton)
+	//		{
+	//			printf("The viewport is Panned!\n");
+	//			return true;
+	//		}
+	//		if(me->buttons() & Qt::RightButton)
+	//		{
+	//			printf("The viewport is Zoomed!\n");
+	//			return true;
+	//		}
+	//	}
+	//	else if(ke->modifiers() == Qt::NoModifier)
+	//	{
+	//		if(me->button() == Qt::LeftButton)
+	//		{
+	//			printf("Only Left is Pressed!\n");
+	//			return true;
+	//		}
+	//		if(me->button() == Qt::MidButton)
+	//		{
+	//			printf("Only Mid is Pressed!\n");
+	//			return true;
+	//		}
+	//		if(me->button() == Qt::RightButton)
+	//		{
+	//			printf("Only Right is Pressed!\n");
+	//			return true;
+	//		}
+	//	}
+	//}
+
 
 	//if(event->type() == QEvent::KeyRelease)
 	//{
