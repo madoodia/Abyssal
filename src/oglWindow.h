@@ -21,6 +21,7 @@
 #include <QtCore/Qt>
 #include <QtCore/QTimer>
 #include <QtCore/QObject>
+#include <QtGui/QPainter>
 
 #include <stb_image.h>
 

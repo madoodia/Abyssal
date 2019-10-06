@@ -45,7 +45,6 @@ void OGLWindow::initializeGL()
 	setMouseTracking(true);
 
 	glViewport(0, 0, width(), height());
-	glEnable(GL_DEPTH_TEST);
 
 	ourShaders.addShaders("shaders/shader.vs", "shaders/shader.fs");
 
@@ -166,6 +165,7 @@ void OGLWindow::paintGL()
 {
 	glClearColor(0.2f, 0.3f, 0.4f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_DEPTH_TEST);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture1);
@@ -218,6 +218,16 @@ void OGLWindow::paintGL()
 
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 	}
+
+	// Render Text
+	QPainter painter(this);
+	painter.beginNativePainting();
+	painter.setPen(Qt::white);
+	painter.setFont(QFont("Calibri", 12));
+	painter.drawText(5, 5, width(), height(), Qt::AlignLeft, "OpenGL Version:");
+	painter.drawText(5, 20, width(), height(), Qt::AlignLeft, "FPS:");
+	painter.drawText(5, 35, width(), height(), Qt::AlignLeft, "x: y: ");
+	painter.end();
 }
 
 //
