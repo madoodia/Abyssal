@@ -29,6 +29,8 @@ USELESS_EXT        = *.obj \
                      *.lib \
                      *.exp \
                      *.idb \
+                     *.pdb \
+                     *.ilk \
                      *.cpp \
                      *.h
 
@@ -51,7 +53,7 @@ DEFAULT_WIN_LIBS	= kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib a
 TARGET             = $(PROJECT_NAME).exe
 INCLUDES           = -I. -I$(GLEW_LOCATION)/include -I$(QT_LOCATION)/include -I$(GLM_LOCATION) -I$(STB_LOCATION) -I$(QT_LOCATION)/mkspecs/win32-msvc
 LIBS               = -LIBPATH:$(QT_LOCATION)/lib -LIBPATH:$(GLEW_LOCATION)/lib $(EXTRA_WIN_LIBS) $(DEFAULT_WIN_LIBS)
-LINKER_FLAGS       = -nologo  -MACHINE:X64
+LINKER_FLAGS       = -nologo -MACHINE:X64
 DEL                 = del
 LINKER              = link
 MOC                 = moc
@@ -63,7 +65,7 @@ CC_FLAGS     = -Zc:wchar_t -O2 -FC -MT -W3 -GR -EHs $(DEFINES) # Warning Level 3
 # CC_FLAGS     = -Zc:wchar_t -O2 -FC -MD -Wall -GR -EHs $(DEFINES) # Full warningg
 
 
-.SUFFIXES: .cpp .c .obj .exe
+.SUFFIXES: .h .cpp .c .obj .exe
 
 .cpp.obj:
     $(CC) -c $(INCLUDES) $(CC_FLAGS) @<<
