@@ -9,7 +9,7 @@
 // Our Headers
 #include "oglWindow.h"
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
 	QSurfaceFormat format = QSurfaceFormat::defaultFormat();
 	format.setVersion(3, 3);
