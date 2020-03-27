@@ -23,7 +23,7 @@
                 "command": "${workspaceFolder}/${workspaceFolderBasename}.exe",
             },
             "linux": {
-                "command": "${workspaceFolder}",
+                "command": "${workspaceFolder}/${workspaceFolderBasename}",
             },
             "problemMatcher": []
         }
