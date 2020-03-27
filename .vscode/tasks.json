@@ -4,7 +4,12 @@
         {
             "type": "shell",
             "label": "build",
-            "command": "${workspaceFolder}\\build.bat",
+            "windows": {
+                "command": "${workspaceFolder}/build.bat",
+            },
+            "linux": {
+                "command": "${workspaceFolder}/build.sh",
+            },
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -14,7 +19,12 @@
         {
             "type": "shell",
             "label": "run",
-            "command": "${workspaceFolder}\\${workspaceFolderBasename}.exe",
+            "windows": {
+                "command": "${workspaceFolder}/${workspaceFolderBasename}.exe",
+            },
+            "linux": {
+                "command": "${workspaceFolder}",
+            },
             "problemMatcher": []
         }
     ]
