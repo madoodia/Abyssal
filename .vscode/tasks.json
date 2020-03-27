@@ -1,31 +1,31 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "type": "shell",
-            "label": "build",
-            "windows": {
-                "command": "${workspaceFolder}/build.bat",
-            },
-            "linux": {
-                "command": "${workspaceFolder}/build.sh",
-            },
-            "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        },
-        {
-            "type": "shell",
-            "label": "run",
-            "windows": {
-                "command": "${workspaceFolder}/${workspaceFolderBasename}.exe",
-            },
-            "linux": {
-                "command": "${workspaceFolder}/${workspaceFolderBasename}",
-            },
-            "problemMatcher": []
-        }
-    ]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "shell",
+      "label": "build",
+      "windows": {
+        "command": "${workspaceFolder}/build.bat",
+      },
+      "linux": {
+        "command": "${workspaceFolder}/build.sh",
+      },
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "type": "shell",
+      "label": "run",
+      "windows": {
+        "command": "${workspaceFolder}/${workspaceFolderBasename}.exe",
+      },
+      "linux": {
+        "command": "${workspaceFolder}/${workspaceFolderBasename}",
+      },
+      "problemMatcher": []
+    }
+  ]
 }
