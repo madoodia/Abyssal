@@ -134,7 +134,7 @@ void OGLWindow::initializeGL()
   }
   else
   {
-    printf("Failed to load testure!\n");
+    printf("Failed to load texture!\n");
   }
   stbi_image_free(data);
 
@@ -154,7 +154,7 @@ void OGLWindow::initializeGL()
   }
   else
   {
-    printf("Failed to load testure!\n");
+    printf("Failed to load texture!\n");
   }
   stbi_image_free(data);
 
