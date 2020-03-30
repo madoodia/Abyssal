@@ -11,11 +11,9 @@ set(SOURCES
 
 add_executable($ENV{TARGET_NAME} ${SOURCES})
 
-
-# Qt5 related commands
+# Qt5
 find_package(Qt5 COMPONENTS Core Widgets Gui REQUIRED)
 target_link_libraries($ENV{TARGET_NAME} Qt5::Core Qt5::Widgets Qt5::Gui)
-
 
 # OpenGL
 find_package(OpenGL REQUIRED)

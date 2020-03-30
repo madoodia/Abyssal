@@ -27,6 +27,7 @@ export GLM_LOCATION=$SDKS_LOCATION/glm
 
 # echo $TARGET_NAME
 
+rm -rf build
 mkdir -p build
 cd build
 
