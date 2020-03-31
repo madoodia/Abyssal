@@ -22,7 +22,7 @@
 #include <QtCore/QTime>
 #include <QtCore/QObject>
 #include <QtGui/QPainter>
-#include <QtGui/qvector2d.h>
+#include <QtGui/QVector2D>
 
 #include <stb_image.h>
 
@@ -44,7 +44,7 @@ public:
 protected:
   void initializeGL() override;
   void paintGL() override;
-  //void resizeGL(int w, int h) override;
+  void resizeGL(int w, int h) override;
 
   void closeEvent(QCloseEvent *event) override;
   void keyPressEvent(QKeyEvent *event) override;

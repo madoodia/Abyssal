@@ -1,5 +1,6 @@
 {
   "files.associations": {
+    "*.linux": "makefile",
     "*.nmake": "makefile",
     "*.gnu": "makefile",
     "*.win": "makefile",
@@ -57,7 +58,8 @@
     "xtree": "cpp",
     "xutility": "cpp",
     "qevent": "cpp",
-    "qt": "cpp"
+    "qt": "cpp",
+    "qsurfaceformat": "cpp"
   },
   "C_Cpp.dimInactiveRegions": true,
   "C_Cpp.errorSquiggles": "Enabled",

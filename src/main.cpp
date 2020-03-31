@@ -6,6 +6,7 @@
 
 // Third Party Headers
 #include <QtWidgets/QApplication>
+#include <QtGui/QSurfaceFormat>
 
 // Our Headers
 #include "oglWindow.h"

@@ -175,6 +175,8 @@ void OGLWindow::initializeGL()
 
 void OGLWindow::paintGL()
 {
+  printf("paintGL...\n");
+
   t1 = QTime::currentTime();
   float theoric = 0.001 * interval * nbFrames;
   float measured = 0.001 * t0.msecsTo(t1);
@@ -255,12 +257,12 @@ void OGLWindow::paintGL()
   painter.end();
 }
 
-//
-//void OGLWindow::resizeGL(int w, int h)
-//{
-//	glViewport(0, 0, w, h);
-//	update();
-//}
+void OGLWindow::resizeGL(int w, int h)
+{
+  printf("resizeGL...\n");
+  glViewport(0, 0, w, h);
+  // update();
+}
 
 void OGLWindow::closeEvent(QCloseEvent *event)
 {
