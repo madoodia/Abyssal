@@ -5,8 +5,8 @@
 // C++ Headers
 
 // Third Party Headers
-#include <QtWidgets/QApplication>
 #include <QtGui/QSurfaceFormat>
+#include <QtWidgets/QApplication>
 
 // Our Headers
 #include "oglWindow.h"
