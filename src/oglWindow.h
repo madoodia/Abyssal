@@ -6,23 +6,23 @@
 #define OGLWINDOW_H
 
 // C++ Headers
-#include <stdlib.h>
 #include <cmath>
+#include <stdlib.h>
 
 // Third Party Headers
 #include <GL/glew.h>
 
-#include <QtWidgets/QOpenGLWidget>
 #include <QtCore/QEvent>
-#include <QtGui/QPaintEvent>
+#include <QtCore/QObject>
+#include <QtCore/QTime>
+#include <QtCore/Qt>
+#include <QtGui/QCloseEvent>
 #include <QtGui/QKeyEvent>
 #include <QtGui/QMouseEvent>
-#include <QtGui/QCloseEvent>
-#include <QtCore/Qt>
-#include <QtCore/QTime>
-#include <QtCore/QObject>
+#include <QtGui/QPaintEvent>
 #include <QtGui/QPainter>
 #include <QtGui/QVector2D>
+#include <QtWidgets/QOpenGLWidget>
 
 #include <stb_image.h>
 
