@@ -44,6 +44,7 @@ public:
 protected:
   void initializeGL() override;
   void paintGL() override;
+
   void resizeGL(int w, int h) override;
 
   void closeEvent(QCloseEvent *event) override;
@@ -65,6 +66,7 @@ private:
 
   glm::vec3 cameraPos;
   glm::vec3 cameraFront;
+
   glm::vec3 cameraDirection;
   glm::vec3 cameraRight;
   glm::vec3 cameraUp;

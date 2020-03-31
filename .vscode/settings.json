@@ -7,6 +7,8 @@
     "qpaintevent": "cpp",
     "qpainter": "cpp"
   },
+  "editor.formatOnSave": true,
+  "files.autoSave": "onFocusChange",
   "C_Cpp.dimInactiveRegions": true,
   "C_Cpp.errorSquiggles": "Enabled",
   "C_Cpp.autocomplete": "Default",
@@ -17,5 +19,5 @@
   "[c]": {
     "editor.quickSuggestions": true
   },
-  "C_Cpp.clang_format_fallbackStyle": " { BasedOnStyle: LLVM, UseTab: Never, IndentWidth: 2, TabWidth: 2, BreakBeforeBraces: Allman, AllowShortIfStatementsOnASingleLine: false, IndentCaseLabels: false, ColumnLimit: 0, AccessModifierOffset: -2 }"
+  "C_Cpp.clang_format_path": ""
 }
