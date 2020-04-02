@@ -31,14 +31,14 @@ void Shader::addShaders(const char *vShaderPath, const char *fShaderPath)
 
 std::string Shader::readFile(const char *filePath)
 {
-  std::string content;
+  std::string content = "";
 
   std::ifstream fileStream(filePath, std::ios::in);
 
   if (!fileStream.is_open())
   {
     printf("File %s does not exists!\n", filePath);
-    return "";
+    return content;
   }
 
   std::string line = "";

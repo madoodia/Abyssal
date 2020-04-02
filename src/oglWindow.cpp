@@ -223,13 +223,11 @@ void OGLWindow::paintGL()
   glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
   glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
 
-  glm::vec3 cubePositions[10] =
-      {
-          glm::vec3(0.0f, 0.0f, 0.0f)};
+  glm::vec3 cubePositions[10] = {};
 
   for (unsigned int i = 0; i < 10; i++)
   {
-    cubePositions[i] = glm::vec3(1.0f * i, 0.0f, 0.0f);
+    cubePositions[i] = glm::vec3(0.0f, 0.0f, -1.0f * i);
   }
 
   glBindVertexArray(vao);
@@ -238,9 +236,9 @@ void OGLWindow::paintGL()
   {
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, cubePositions[i - 1]);
-    model = glm::rotate(model, glm::radians(xRot * i), glm::vec3(1.0f, 0.0f, 0.0f));
-    model = glm::rotate(model, glm::radians(yRot * i), glm::vec3(0.0f, 1.0f, 0.0f));
-    model = glm::rotate(model, glm::radians(zRot * i), glm::vec3(0.0f, 0.0f, 1.0f));
+    model = glm::rotate(model, glm::radians(xRot * i * 15), glm::vec3(1.0f, 0.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(yRot * i * 15), glm::vec3(0.0f, 1.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(zRot * i * 15), glm::vec3(0.0f, 0.0f, 1.0f));
     glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
 
     glDrawArrays(GL_TRIANGLES, 0, 36);

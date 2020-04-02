@@ -6,11 +6,11 @@
 #define SHADER_H
 
 // C++ Headers
+#include <fstream>
+#include <iostream>
+#include <sstream>
 #include <stdio.h>
 #include <string>
-#include <iostream>
-#include <fstream>
-#include <sstream>
 
 // Third Party Headers
 #include <GL/glew.h>
