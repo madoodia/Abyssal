@@ -18,6 +18,22 @@
     },
     {
       "type": "shell",
+      "label": "build_debug",
+      "windows": {
+        "command": "${workspaceFolder}/build_debug.bat",
+      },
+      "linux": {
+        "command": "${workspaceFolder}/build_debug.sh",
+      },
+      "args": [],
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "type": "shell",
       "label": "run",
       "windows": {
         "command": "${workspaceFolder}/${workspaceFolderBasename}.exe",

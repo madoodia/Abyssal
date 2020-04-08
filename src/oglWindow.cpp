@@ -18,7 +18,7 @@ OGLWindow::OGLWindow(QWidget *parent)
       yaw(-90.0f), pitch(0.0f), firstMouse(true),
       interval(1.0f), nbFrames(100.0f)
 {
-  setMouseTracking(true);
+  // setMouseTracking(true);
   t0 = QTime::currentTime();
 }
 
@@ -265,7 +265,7 @@ void OGLWindow::resizeGL(int w, int h)
 void OGLWindow::closeEvent(QCloseEvent *event)
 {
   printf("The widget is closing...\n");
-  return QWidget::closeEvent(event);
+  QWidget::closeEvent(event);
 }
 
 void OGLWindow::keyPressEvent(QKeyEvent *event)
