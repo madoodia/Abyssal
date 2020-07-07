@@ -29,3 +29,7 @@ include_directories($ENV{STB_LOCATION})
 
 # GLM
 include_directories($ENV{GLM_LOCATION})
+
+# OpenCL
+include_directories($ENV{OPENCL_LOCATION}/include)
+target_link_libraries($ENV{TARGET_NAME} $ENV{OPENCL_LOCATION}/lib OpenCL)

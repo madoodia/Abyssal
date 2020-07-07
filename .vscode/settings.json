@@ -1,22 +1,11 @@
 {
   "files.associations": {
     "*.linux": "makefile",
+    "*.cl": "cpp",
     "*.nmake": "makefile",
     "*.gnu": "makefile",
     "*.win": "makefile",
-    "qpaintevent": "cpp",
-    "qpainter": "cpp",
-    "*.tcc": "cpp",
-    "fstream": "cpp",
-    "qquickview": "cpp",
-    "qsgrendererinterface": "cpp",
-    "qquickwindow": "cpp",
-    "atomic": "cpp",
-    "chrono": "cpp",
-    "string": "cpp",
-    "functional": "cpp",
-    "sstream": "cpp",
-    "iosfwd": "cpp"
+    "qsurfaceformat": "cpp"
   },
   "editor.formatOnSave": true,
   "files.autoSave": "onFocusChange",

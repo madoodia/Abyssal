@@ -5,7 +5,7 @@
       "type": "shell",
       "label": "build",
       "windows": {
-        "command": "${workspaceFolder}/.buildSystem/windows/build.bat",
+        "command": "${workspaceFolder}/.buildSystem/win/build.bat",
       },
       "linux": {
         "command": "${workspaceFolder}/.buildSystem/linux/build.sh",
@@ -28,7 +28,7 @@
       "type": "shell",
       "label": "build_debug",
       "windows": {
-        "command": "${workspaceFolder}/.buildSystem/windows/build_debug.bat",
+        "command": "${workspaceFolder}/.buildSystem/win/build_debug.bat",
       },
       "linux": {
         "command": "${workspaceFolder}/.buildSystem/linux/build_debug.sh",
