@@ -1,11 +1,12 @@
 {
   "files.associations": {
     "*.linux": "makefile",
-    "*.cl": "cpp",
     "*.nmake": "makefile",
     "*.gnu": "makefile",
     "*.win": "makefile",
-    "qsurfaceformat": "cpp"
+    "*.cl": "opencl",
+    "*.vs": "glsl",
+    "*.fs": "glsl"
   },
   "editor.formatOnSave": true,
   "files.autoSave": "onFocusChange",
