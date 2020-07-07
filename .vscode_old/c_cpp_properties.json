@@ -1,0 +1,38 @@
+{
+  "configurations": [
+    {
+      "name": "Win32",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/14.23.28105/**",
+        "${SDKS_LOCATION}/OpenGL/GLEW/include",
+        "${SDKS_LOCATION}/Qt5/include",
+        "${SDKS_LOCATION}/OpenGL/STB",
+        "${SDKS_LOCATION}/OpenGL/GLM"
+      ],
+      "defines": [],
+      "windowsSdkVersion": "10.0.17134.0",
+      "compilerPath": "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/14.23.28105/bin/Hostx64/x64/cl.exe",
+      "cStandard": "c11",
+      "cppStandard": "c++11",
+      "intelliSenseMode": "msvc-x64"
+    },
+    {
+      "name": "Linux",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "/opt/rh/devtoolset-6/root/bin/**",
+        "${SDKS_LOCATION}/glew/include",
+        "${SDKS_LOCATION}/glm",
+        "${SDKS_LOCATION}/Qt5/include",
+        "${SDKS_LOCATION}/stb"
+      ],
+      "defines": [],
+      "compilerPath": "/opt/rh/devtoolset-6/root/bin/gcc",
+      "cStandard": "c11",
+      "cppStandard": "c++11",
+      "intelliSenseMode": "clang-x64"
+    }
+  ],
+  "version": 4
+}
