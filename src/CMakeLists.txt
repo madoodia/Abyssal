@@ -2,14 +2,16 @@
 # (C) 2020 madoodia.com #
 # --------------------- #
 
-set(SOURCES
+set(SOURCES_FILES
     main.cpp
-    oglWindow.cpp
+    window.cpp
+    oglWidget.cpp
     shader.cpp
     stb_image.cpp
+    application.qrc
 )
 
-add_executable($ENV{TARGET_NAME} ${SOURCES})
+add_executable($ENV{TARGET_NAME} ${SOURCES_FILES})
 
 # Qt5
 find_package(Qt5 COMPONENTS Core Widgets Gui REQUIRED)

@@ -1,9 +1,10 @@
 /* --------------------- */
 /* (C) 2020 madoodia.com */
+/*  All Rights Reserved. */
 /* --------------------- */
 
-#ifndef OGLWINDOW_H
-#define OGLWINDOW_H
+#ifndef OGLWIDGET_H
+#define OGLWIDGET_H
 
 // C++ Headers
 #include <cmath>
@@ -21,6 +22,7 @@
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPaintEvent>
 #include <QtGui/QPainter>
+#include <QtGui/QSurfaceFormat>
 #include <QtGui/QVector2D>
 #include <QtWidgets/QOpenGLWidget>
 
@@ -33,13 +35,13 @@
 // Our Headers
 #include "shader.h"
 
-class OGLWindow : public QOpenGLWidget
+class OGLWidget : public QOpenGLWidget
 {
   Q_OBJECT
 
 public:
-  OGLWindow(QWidget *parent = nullptr);
-  ~OGLWindow();
+  OGLWidget(QWidget *parent = nullptr);
+  ~OGLWidget();
 
 protected:
   void initializeGL() override;
@@ -92,4 +94,4 @@ private:
   Shader ourShaders;
 };
 
-#endif // OGLWINDOW_H
+#endif // OGLWIDGET_H

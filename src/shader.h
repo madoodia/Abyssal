@@ -1,5 +1,6 @@
 /* --------------------- */
 /* (C) 2020 madoodia.com */
+/*  All Rights Reserved. */
 /* --------------------- */
 
 #ifndef SHADER_H

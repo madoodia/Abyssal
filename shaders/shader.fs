@@ -10,5 +10,5 @@ uniform float mixValue;
 
 void main()
 {
-    FragColor = mix(texture(texture1, (TexCoord)), texture(texture2, (TexCoord*2)), mixValue);
+  FragColor=mix(texture(texture1,(TexCoord)),texture(texture2,(TexCoord*2)),mixValue);
 }

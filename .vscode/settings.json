@@ -1,12 +1,15 @@
 {
   "files.associations": {
     "*.linux": "makefile",
+    "*.cl": "opencl",
     "*.nmake": "makefile",
     "*.gnu": "makefile",
     "*.win": "makefile",
-    "*.cl": "opencl",
     "*.vs": "glsl",
-    "*.fs": "glsl"
+    "*.fs": "glsl",
+    "qmenubar": "cpp",
+    "qstatusbar": "cpp",
+    "qmainwindow": "cpp"
   },
   "editor.formatOnSave": true,
   "files.autoSave": "onFocusChange",

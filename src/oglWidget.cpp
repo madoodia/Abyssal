@@ -1,13 +1,14 @@
 /* --------------------- */
 /* (C) 2020 madoodia.com */
+/*  All Rights Reserved. */
 /* --------------------- */
 
 // C++ Headers
 
 // Own Headers
-#include "oglWindow.h"
+#include "oglWidget.h"
 
-OGLWindow::OGLWindow(QWidget *parent)
+OGLWidget::OGLWidget(QWidget *parent)
     : mixValue(0.2f), xRot(0.0f), yRot(1.0f),
       zRot(0.0f), xvRot(0.0f), yvRot(1.0f),
       zvRot(0.0f), xPan(0.0f), yPan(0.0f),
@@ -20,13 +21,18 @@ OGLWindow::OGLWindow(QWidget *parent)
 {
   // setMouseTracking(true);
   t0 = QTime::currentTime();
+
+  QSurfaceFormat format = QSurfaceFormat::defaultFormat();
+  format.setVersion(3, 3);
+  format.setProfile(QSurfaceFormat::CoreProfile);
+  setFormat(format);
 }
 
-OGLWindow::~OGLWindow()
+OGLWidget::~OGLWidget()
 {
 }
 
-void OGLWindow::initializeGL()
+void OGLWidget::initializeGL()
 {
   printf("initializeGL\n");
 
@@ -173,7 +179,7 @@ void OGLWindow::initializeGL()
   cameraUp = glm::cross(cameraDirection, cameraRight);
 }
 
-void OGLWindow::paintGL()
+void OGLWidget::paintGL()
 {
   printf("paintGL...\n");
 
@@ -255,20 +261,20 @@ void OGLWindow::paintGL()
   painter.end();
 }
 
-void OGLWindow::resizeGL(int w, int h)
+void OGLWidget::resizeGL(int w, int h)
 {
   printf("resizeGL...\n");
   glViewport(0, 0, w, h);
   // update();
 }
 
-void OGLWindow::closeEvent(QCloseEvent *event)
+void OGLWidget::closeEvent(QCloseEvent *event)
 {
   printf("The widget is closing...\n");
   QWidget::closeEvent(event);
 }
 
-void OGLWindow::keyPressEvent(QKeyEvent *event)
+void OGLWidget::keyPressEvent(QKeyEvent *event)
 {
   if (event->key() == Qt::Key_Escape)
   {
@@ -403,7 +409,7 @@ void OGLWindow::keyPressEvent(QKeyEvent *event)
   return QWidget::keyPressEvent(event);
 }
 
-void OGLWindow::mousePressEvent(QMouseEvent *event)
+void OGLWidget::mousePressEvent(QMouseEvent *event)
 {
   QEvent *e = static_cast<QEvent *>(event);
   QKeyEvent *ke = static_cast<QKeyEvent *>(e);
@@ -417,7 +423,7 @@ void OGLWindow::mousePressEvent(QMouseEvent *event)
   }
 }
 
-void OGLWindow::mouseMoveEvent(QMouseEvent *event)
+void OGLWidget::mouseMoveEvent(QMouseEvent *event)
 {
   QEvent *e = static_cast<QEvent *>(event);
   QKeyEvent *ke = static_cast<QKeyEvent *>(e);
@@ -475,11 +481,11 @@ void OGLWindow::mouseMoveEvent(QMouseEvent *event)
   }
 }
 
-void OGLWindow::mouseReleaseEvent(QMouseEvent *event)
+void OGLWidget::mouseReleaseEvent(QMouseEvent *event)
 {
 }
 
-bool OGLWindow::event(QEvent *event)
+bool OGLWidget::event(QEvent *event)
 {
   QKeyEvent *ke = static_cast<QKeyEvent *>(event);
   QMouseEvent *me = static_cast<QMouseEvent *>(event);

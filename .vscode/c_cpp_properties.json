@@ -19,7 +19,7 @@
       "name": "Linux",
       "includePath": [
         "${workspaceFolder}/**",
-        "/opt/rh/devtoolset-6/root/bin/**",
+        "/opt/rh/devtoolset-9/root/bin/**",
         "${SDKS_LOCATION}/googletest/include",
         "${DEV_LOCATION}/madAPI/include/**",
         "${SDKS_LOCATION}/glew/include",
@@ -33,7 +33,7 @@
         "${SDKS_LOCATION}/CUDA/include"
       ],
       "defines": [],
-      "compilerPath": "/opt/rh/devtoolset-6/root/bin/gcc",
+      "compilerPath": "/opt/rh/devtoolset-9/root/bin/gcc",
       "cStandard": "c11",
       "cppStandard": "c++11",
       "intelliSenseMode": "clang-x64"
