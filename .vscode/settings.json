@@ -11,7 +11,9 @@
     "qstatusbar": "cpp",
     "qmainwindow": "cpp",
     "qfile": "cpp",
-    "qtextstream": "cpp"
+    "qtextstream": "cpp",
+    "qtoolbar": "cpp",
+    "qhboxlayout": "cpp"
   },
   "editor.formatOnSave": true,
   "files.autoSave": "onFocusChange",

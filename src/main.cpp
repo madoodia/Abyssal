@@ -17,7 +17,12 @@ int main(int argc, char *argv[])
 {
   Q_INIT_RESOURCE(application);
 
+  QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+  QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+
   QApplication app(argc, argv);
+
+  // Apply custom stylesheet to the application
   QFile style(":/style.css");
   if (style.open(QFile::ReadOnly))
   {
