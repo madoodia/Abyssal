@@ -1,12 +1,24 @@
 QMenu {
-    background-color: rgb(61, 61, 61);
+    color: rgb(233, 233, 233);
+    background-color: rgb(37, 37, 37);
 }
+
 QMenuBar {
-    background-color: rgb(61, 61, 61);
+    color: rgb(233, 233, 233);
+    background-color: rgb(37, 37, 37);
 }
+
+QAction {
+    color: rgb(233, 233, 233);
+    background-color: rgb(37, 37, 37);
+}
+
 QToolBar {
-    background-color: rgb(61, 61, 61);
+    color: rgb(233, 233, 233);
+    background-color: rgb(37, 37, 37);
 }
+
 QStatusBar {
-    background-color: rgb(61, 61, 61);
+    color: rgb(233, 233, 233);
+    background-color: rgb(37, 37, 37);
 }

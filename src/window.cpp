@@ -47,7 +47,7 @@ void Window::createStatusBar()
 
 void Window::newFile()
 {
-  statusBar()->showMessage(tr("I Love you my Sweet Heart <3!"));
+  statusBar()->showMessage(tr("The new file is Created!"));
 }
 
 void Window::closeEvent(QCloseEvent *event)
