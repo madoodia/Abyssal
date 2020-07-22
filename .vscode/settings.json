@@ -9,7 +9,9 @@
     "*.fs": "glsl",
     "qmenubar": "cpp",
     "qstatusbar": "cpp",
-    "qmainwindow": "cpp"
+    "qmainwindow": "cpp",
+    "qfile": "cpp",
+    "qtextstream": "cpp"
   },
   "editor.formatOnSave": true,
   "files.autoSave": "onFocusChange",

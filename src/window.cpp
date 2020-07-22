@@ -24,6 +24,7 @@ Window::Window(QMainWindow *parent)
 
 Window::~Window()
 {
+  delete viewport;
 }
 
 void Window::createActions()

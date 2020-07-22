@@ -6,6 +6,8 @@
 // C++ Headers
 
 // Third Party Headers
+#include <QtCore/QFile>
+#include <QtCore/QTextStream>
 #include <QtWidgets/QApplication>
 
 // Our Headers
@@ -14,18 +16,20 @@
 int main(int argc, char *argv[])
 {
   Q_INIT_RESOURCE(application);
-  // QSurfaceFormat format = QSurfaceFormat::defaultFormat();
-  // format.setVersion(3, 3);
-  // format.setProfile(QSurfaceFormat::CoreProfile);
 
   QApplication app(argc, argv);
+  QFile style(":/style.css");
+  if (style.open(QFile::ReadOnly))
+  {
+    QTextStream stylesheet(&style);
+    app.setStyleSheet(stylesheet.readAll());
+  }
 
   QCoreApplication::setOrganizationName("madoodia.com");
   QCoreApplication::setApplicationName("Abyssal");
   QCoreApplication::setApplicationVersion(QT_VERSION_STR);
 
   Window win;
-  // win.setFormat(format);
   win.show();
 
   return app.exec();
