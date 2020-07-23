@@ -13,7 +13,11 @@
     "qfile": "cpp",
     "qtextstream": "cpp",
     "qtoolbar": "cpp",
-    "qhboxlayout": "cpp"
+    "qhboxlayout": "cpp",
+    "qwidget": "cpp",
+    "qgroupbox": "cpp",
+    "qlineedit": "cpp",
+    "qslider": "cpp"
   },
   "editor.formatOnSave": true,
   "files.autoSave": "onFocusChange",

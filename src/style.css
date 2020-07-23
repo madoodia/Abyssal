@@ -1,6 +1,10 @@
+/*QSplitter {
+    color: rgb(122, 122, 122);
+    background-color: rgb(43, 43, 43);
+}
 QWidget {
-    color: rgb(73, 73, 73);
-    background-color: rgb(94, 94, 94);
+    color: rgb(32, 32, 32);
+    background-color: rgb(216, 216, 216);
 }
 
 QMenu {
@@ -22,4 +26,15 @@ QToolBar {
 QStatusBar {
     color: rgb(233, 233, 233);
     background-color: rgb(37, 37, 37);
-}
+} */
+
+/* QGroupBox { 
+    border: 2px solid gray; 
+    border-radius: 3px; 
+} 
+QGroupBox::title { 
+    background-color: transparent;
+     subcontrol-position: top left; 
+     padding:2 20px;
+ } 
+  */
