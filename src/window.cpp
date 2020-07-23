@@ -156,6 +156,10 @@ Window::Window(QMainWindow *parent)
   mainLayoutQHBL->addWidget(hMainQS);
   mainQW->setLayout(mainLayoutQHBL);
 
+  // Signals to the Viewport
+  /* Codes Here*/
+  // -----------------------
+
   setWindowTitle("Abyssal");
   resize(650, 400);
   showMaximized();

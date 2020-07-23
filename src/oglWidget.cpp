@@ -274,6 +274,16 @@ void OGLWidget::closeEvent(QCloseEvent *event)
   QWidget::closeEvent(event);
 }
 
+void OGLWidget::enterEvent(QEvent *event)
+{
+  setFocus();
+}
+
+void OGLWidget::leaveEvent(QEvent *event)
+{
+  clearFocus();
+}
+
 void OGLWidget::keyPressEvent(QKeyEvent *event)
 {
   if (event->key() == Qt::Key_Escape)
