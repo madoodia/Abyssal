@@ -95,8 +95,6 @@ private:
 
   GLuint length;
 
-  GLfloat pointVertex[3] = {0.0f, 0.0f, 0.0f};
-
   Shader ourShaders;
 };
 

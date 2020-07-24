@@ -140,36 +140,33 @@ void OGLWidget::paintGL()
 
   glm::vec3 linePositions[10] = {};
 
-  for (int i = -5; i < 5; i++)
+  for (int i = 0; i < 11; i++)
   {
-    linePositions[i + 5] = glm::vec3(1.0f * i, 0.0f, 0.0f);
+    linePositions[i] = glm::vec3(1.0f * i, 0.0f, 0.0f);
   }
 
   glBindVertexArray(vao);
 
   glm::mat4 model = glm::mat4(1.0f);
-  for (uint i = 0; i < 10; i++)
+  for (uint i = 0; i < 11; i++)
   {
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, linePositions[i]);
-    // model = glm::rotate(model, glm::radians(xRot * i * 15), glm::vec3(1.0f, 0.0f, 0.0f));
-    // model = glm::rotate(model, glm::radians(yRot * i * 15), glm::vec3(0.0f, 1.0f, 0.0f));
-    // model = glm::rotate(model, glm::radians(zRot * i * 15), glm::vec3(0.0f, 0.0f, 1.0f));
     glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
 
-    glEnable(GL_LINE_SMOOTH);
-    glLineWidth(3);
+    // glEnable(GL_LINE_SMOOTH);
+    // glLineWidth(3);
     glDrawArrays(GL_LINE_STRIP, 0, 2);
-    glDisable(GL_LINE_SMOOTH);
+    // glDisable(GL_LINE_SMOOTH);
   }
 
   glm::vec3 linePositions2[10] = {};
 
-  for (int i = -5; i < 5; i++)
+  for (int i = 0; i < 11; i++)
   {
-    linePositions2[i + 5] = glm::vec3(0.0f, 0.0f, 1.0f * i);
+    linePositions2[i] = glm::vec3(0.0f, 0.0f, 1.0f * i);
   }
-  for (uint i = 0; i < 10; i++)
+  for (uint i = 0; i < 11; i++)
   {
     glm::mat4 model2 = glm::mat4(1.0f);
     model2 = glm::translate(model2, linePositions2[i]);
@@ -178,44 +175,26 @@ void OGLWidget::paintGL()
     // model2 = glm::rotate(model2, glm::radians(zRot * i * 15), glm::vec3(0.0f, 0.0f, 1.0f));
     glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model2));
 
-    glEnable(GL_LINE_SMOOTH);
-    glLineWidth(3);
+    // glEnable(GL_LINE_SMOOTH);
+    // glLineWidth(3);
     glDrawArrays(GL_LINE_STRIP, 0, 2);
-    glDisable(GL_LINE_SMOOTH);
+    // glDisable(GL_LINE_SMOOTH);
   }
 
   // Origin Point
-  // glPointSize(20);
-  // glEnable(GL_POINT_SMOOTH);
-  // glDrawArrays(GL_POINTS, 0, 1);
-  // glDisable(GL_POINT_SMOOTH);
-
+  glPointSize(20);
   glEnable(GL_POINT_SMOOTH);
-  glEnableClientState(GL_VERTEX_ARRAY);
-  glPointSize(10);
-  glVertexPointer(3, GL_FLOAT, 0, pointVertex);
   glDrawArrays(GL_POINTS, 0, 1);
-  glDisableClientState(GL_VERTEX_ARRAY);
   glDisable(GL_POINT_SMOOTH);
 
-  // glEnableClientState(GL_VERTEX_ARRAY);
-  // glPointSize(10);
-  // glVertexPointer(3, GL_FLOAT, 0, pointVertex2);
-  // glDrawArrays(GL_POINTS, 0, 1);
-  // glDisableClientState(GL_VERTEX_ARRAY);
+  glPointSize(20);
+  glEnable(GL_POINT_SMOOTH);
+  glDrawArrays(GL_POINTS, 1, 1);
+  glDisable(GL_POINT_SMOOTH);
+
+  glBindVertexArray(0);
 
   // -----------------------------------------------------------------
-
-  // glBindVertexArray(vao);
-
-  // glm::mat4 model = glm::mat4(1.0f);
-  // model = glm::translate(model, linePositions);
-  // model = glm::rotate(model, glm::radians(xRot * 15), glm::vec3(1.0f, 0.0f, 0.0f));
-  // model = glm::rotate(model, glm::radians(yRot * 15), glm::vec3(0.0f, 1.0f, 0.0f));
-  // model = glm::rotate(model, glm::radians(zRot * 15), glm::vec3(0.0f, 0.0f, 1.0f));
-  // glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
-
-  // glDrawArrays(GL_LINE_STRIP, 0, 36);
 
   // Render Text
   QPainter painter(this);
