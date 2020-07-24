@@ -10,6 +10,7 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QSplitter>
@@ -127,16 +128,26 @@ Window::Window(QMainWindow *parent)
   smallToolsQW->setMinimumWidth(30);
   smallToolsQW->setMaximumWidth(30);
 
-  QToolButton *gridQTB = new QToolButton;
-  // gridQTB->setToolTip(toolTip);
-  // gridQTB->setIcon(icon);
-  // gridQTB->setIconSize(QSize(32, 32));
+  // QToolButton *gridQTB = new QToolButton;
+  // // gridQTB->setToolTip(toolTip);
+  // // gridQTB->setIcon(icon);
+  // // gridQTB->setIconSize(QSize(32, 32));
 
-  QToolButton *pointQTB = new QToolButton;
-  QToolButton *pointNumQTB = new QToolButton;
+  // QToolButton *pointQTB = new QToolButton;
+  // QToolButton *pointNumQTB = new QToolButton;
+
+  QPushButton *gridQTB = new QPushButton("G");
+  gridQTB->setStatusTip("Toggle Grid");
+  QPushButton *wireframeQTB = new QPushButton("W");
+  wireframeQTB->setStatusTip("Toggle Wireframe/Surface Shading");
+  QPushButton *pointQTB = new QPushButton("P");
+  pointQTB->setStatusTip("Toggle Show/Hide Curve Points");
+  QPushButton *pointNumQTB = new QPushButton("N");
+  pointNumQTB->setStatusTip("Toggle Show/Hide Curve Points Numbers");
 
   QVBoxLayout *smallToolsQVBL = new QVBoxLayout;
   smallToolsQVBL->addWidget(gridQTB);
+  smallToolsQVBL->addWidget(wireframeQTB);
   smallToolsQVBL->addWidget(pointQTB);
   smallToolsQVBL->addWidget(pointNumQTB);
   smallToolsQVBL->addStretch(1);

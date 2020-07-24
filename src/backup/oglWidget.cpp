@@ -9,7 +9,7 @@
 #include "oglWidget.h"
 
 OGLWidget::OGLWidget(QWidget *parent)
-    : xRot(0.0f), yRot(1.0f),
+    : mixValue(0.2f), xRot(0.0f), yRot(1.0f),
       zRot(0.0f), xvRot(0.0f), yvRot(1.0f),
       zvRot(0.0f), xPan(0.0f), yPan(0.0f),
       zPan(-1.0f), fov(45.0f), cameraSpeed(0.05f),
@@ -23,7 +23,7 @@ OGLWidget::OGLWidget(QWidget *parent)
   t0 = QTime::currentTime();
 
   QSurfaceFormat format = QSurfaceFormat::defaultFormat();
-  format.setVersion(4, 5);
+  format.setVersion(3, 3);
   format.setProfile(QSurfaceFormat::CoreProfile);
   setFormat(format);
 }
@@ -34,7 +34,7 @@ OGLWidget::~OGLWidget()
 
 void OGLWidget::initializeGL()
 {
-  // printf("initializeGL\n");
+  printf("initializeGL\n");
 
   if (glewInit() != GLEW_OK)
   {
@@ -62,8 +62,47 @@ void OGLWidget::initializeGL()
 
   // Vertex Data
   float vertices[] = {
-      0.0f, 0.0f, 0.0f,
-      10.0f, 0.0f, 0.0f};
+      -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+      0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
+      0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+      0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+      -0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
+      -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+
+      -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+      0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
+      0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
+      0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
+      -0.5f, 0.5f, 0.5f, 0.0f, 1.0f,
+      -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+
+      -0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+      -0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+      -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+      -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+      -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+      -0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+
+      0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+      0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+      0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+      0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+      0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+      0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+
+      -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+      0.5f, -0.5f, -0.5f, 1.0f, 1.0f,
+      0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
+      0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
+      -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+      -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+
+      -0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
+      0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+      0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+      0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+      -0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
+      -0.5f, 0.5f, -0.5f, 0.0f, 1.0f};
 
   glGenVertexArrays(1, &vao);
   glGenBuffers(1, &vbo);
@@ -73,18 +112,66 @@ void OGLWidget::initializeGL()
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float), (void *)0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)0);
   glEnableVertexAttribArray(0);
+
+  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(3 * sizeof(float)));
+  glEnableVertexAttribArray(1);
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
 
+  // load and create textures
+  int w, h, nrChannels;
+
+  glGenTextures(1, &texture1);
+  glBindTexture(GL_TEXTURE_2D, texture1);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+  //stbi_set_flip_vertically_on_load(true);
+  unsigned char *data = stbi_load("textures/container.jpg", &w, &h, &nrChannels, 0);
+  if (data)
+  {
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+  }
+  else
+  {
+    printf("Failed to load texture!\n");
+  }
+  stbi_image_free(data);
+
+  glGenTextures(1, &texture2);
+  glBindTexture(GL_TEXTURE_2D, texture2);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+  //stbi_set_flip_vertically_on_load(true);
+  data = stbi_load("textures/awesomeface.png", &w, &h, &nrChannels, 0);
+  if (data)
+  {
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+  }
+  else
+  {
+    printf("Failed to load texture!\n");
+  }
+  stbi_image_free(data);
+
   ourShaders.use();
 
+  glUniform1i(glGetUniformLocation(ourShaders.getID(), "texture1"), 0);
+  glUniform1i(glGetUniformLocation(ourShaders.getID(), "texture2"), 1);
+  glUniform1f(glGetUniformLocation(ourShaders.getID(), "mixValue"), mixValue);
+
   // Camera
-  // < +x
-  // ^ -Y
-  cameraPos = glm::vec3(0.0f, -5.0f, 30.0f);
+  cameraPos = glm::vec3(0.0f, 0.0f, 7.0f);
   cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
   cameraDirection = glm::normalize(cameraPos - cameraFront);
   glm::vec3 tempUp(0.0f, 1.0f, 0.0f);
@@ -94,23 +181,29 @@ void OGLWidget::initializeGL()
 
 void OGLWidget::paintGL()
 {
-  // printf("paintGL...\n");
+  printf("paintGL...\n");
 
-  // t1 = QTime::currentTime();
-  // float theoric = 0.001 * interval * nbFrames;
-  // float measured = 0.001 * t0.msecsTo(t1);
-  // float diff = (measured - theoric);
-  // deltaTime = diff / measured;
+  t1 = QTime::currentTime();
+  float theoric = 0.001 * interval * nbFrames;
+  float measured = 0.001 * t0.msecsTo(t1);
+  float diff = (measured - theoric);
+  deltaTime = diff / measured;
 
   //printf("CurrentTime: %f\n", currentFrame);
   //deltaTime = currentFrame - lastFrame;
   //lastFrame = currentFrame;
 
-  glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+  glClearColor(0.2f, 0.3f, 0.4f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glEnable(GL_DEPTH_TEST);
 
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, texture1);
+  glActiveTexture(GL_TEXTURE1);
+  glBindTexture(GL_TEXTURE_2D, texture2);
+
   ourShaders.use();
+  glUniform1f(glGetUniformLocation(ourShaders.getID(), "mixValue"), mixValue);
 
   glm::mat4 view(1.0f);
   glm::mat4 projection(1.0f);
@@ -127,7 +220,7 @@ void OGLWidget::paintGL()
   view = glm::rotate(view, glm::radians(xvRot), glm::vec3(1.0f, 0.0f, 0.0f));
   view = glm::rotate(view, glm::radians(yvRot), glm::vec3(0.0f, 1.0f, 0.0f));
 
-  projection = glm::perspective(glm::radians(fov), (float)width() / (float)height(), 0.1f, 1000.0f);
+  projection = glm::perspective(glm::radians(fov), (float)width() / (float)height(), 0.1f, 100.0f);
 
   modelLocation = glGetUniformLocation(ourShaders.getID(), "model");
   viewLocation = glGetUniformLocation(ourShaders.getID(), "view");
@@ -136,86 +229,26 @@ void OGLWidget::paintGL()
   glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
   glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
 
-  // -----------------------------------------------------------------
+  glm::vec3 cubePositions[10] = {};
 
-  glm::vec3 linePositions[10] = {};
-
-  for (int i = -5; i < 5; i++)
+  for (unsigned int i = 0; i < 10; i++)
   {
-    linePositions[i + 5] = glm::vec3(1.0f * i, 0.0f, 0.0f);
+    cubePositions[i] = glm::vec3(0.0f, 0.0f, -1.0f * i);
   }
 
   glBindVertexArray(vao);
 
-  glm::mat4 model = glm::mat4(1.0f);
-  for (uint i = 0; i < 10; i++)
+  for (unsigned int i = 1; i <= 10; i++)
   {
     glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, linePositions[i]);
-    // model = glm::rotate(model, glm::radians(xRot * i * 15), glm::vec3(1.0f, 0.0f, 0.0f));
-    // model = glm::rotate(model, glm::radians(yRot * i * 15), glm::vec3(0.0f, 1.0f, 0.0f));
-    // model = glm::rotate(model, glm::radians(zRot * i * 15), glm::vec3(0.0f, 0.0f, 1.0f));
+    model = glm::translate(model, cubePositions[i - 1]);
+    model = glm::rotate(model, glm::radians(xRot * i * 15), glm::vec3(1.0f, 0.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(yRot * i * 15), glm::vec3(0.0f, 1.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(zRot * i * 15), glm::vec3(0.0f, 0.0f, 1.0f));
     glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
 
-    glEnable(GL_LINE_SMOOTH);
-    glLineWidth(3);
-    glDrawArrays(GL_LINE_STRIP, 0, 2);
-    glDisable(GL_LINE_SMOOTH);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
   }
-
-  glm::vec3 linePositions2[10] = {};
-
-  for (int i = -5; i < 5; i++)
-  {
-    linePositions2[i + 5] = glm::vec3(0.0f, 0.0f, 1.0f * i);
-  }
-  for (uint i = 0; i < 10; i++)
-  {
-    glm::mat4 model2 = glm::mat4(1.0f);
-    model2 = glm::translate(model2, linePositions2[i]);
-    // model2 = glm::rotate(model2, glm::radians(xRot * i * 15), glm::vec3(1.0f, 0.0f, 0.0f));
-    model2 = glm::rotate(model2, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    // model2 = glm::rotate(model2, glm::radians(zRot * i * 15), glm::vec3(0.0f, 0.0f, 1.0f));
-    glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model2));
-
-    glEnable(GL_LINE_SMOOTH);
-    glLineWidth(3);
-    glDrawArrays(GL_LINE_STRIP, 0, 2);
-    glDisable(GL_LINE_SMOOTH);
-  }
-
-  // Origin Point
-  // glPointSize(20);
-  // glEnable(GL_POINT_SMOOTH);
-  // glDrawArrays(GL_POINTS, 0, 1);
-  // glDisable(GL_POINT_SMOOTH);
-
-  glEnable(GL_POINT_SMOOTH);
-  glEnableClientState(GL_VERTEX_ARRAY);
-  glPointSize(10);
-  glVertexPointer(3, GL_FLOAT, 0, pointVertex);
-  glDrawArrays(GL_POINTS, 0, 1);
-  glDisableClientState(GL_VERTEX_ARRAY);
-  glDisable(GL_POINT_SMOOTH);
-
-  // glEnableClientState(GL_VERTEX_ARRAY);
-  // glPointSize(10);
-  // glVertexPointer(3, GL_FLOAT, 0, pointVertex2);
-  // glDrawArrays(GL_POINTS, 0, 1);
-  // glDisableClientState(GL_VERTEX_ARRAY);
-
-  // -----------------------------------------------------------------
-
-  // glBindVertexArray(vao);
-
-  // glm::mat4 model = glm::mat4(1.0f);
-  // model = glm::translate(model, linePositions);
-  // model = glm::rotate(model, glm::radians(xRot * 15), glm::vec3(1.0f, 0.0f, 0.0f));
-  // model = glm::rotate(model, glm::radians(yRot * 15), glm::vec3(0.0f, 1.0f, 0.0f));
-  // model = glm::rotate(model, glm::radians(zRot * 15), glm::vec3(0.0f, 0.0f, 1.0f));
-  // glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
-
-  // glDrawArrays(GL_LINE_STRIP, 0, 36);
 
   // Render Text
   QPainter painter(this);
@@ -224,13 +257,13 @@ void OGLWidget::paintGL()
   painter.setFont(QFont("Calibri", 12));
   painter.drawText(5, 5, width(), height(), Qt::AlignLeft, "OpenGL Version:");
   painter.drawText(5, 20, width(), height(), Qt::AlignLeft, "FPS:");
-  painter.drawText(5, 35, width(), height(), Qt::AlignLeft, ("Camera Pos: "));
+  painter.drawText(5, 35, width(), height(), Qt::AlignLeft, "x: y: ");
   painter.end();
 }
 
 void OGLWidget::resizeGL(int w, int h)
 {
-  // printf("resizeGL...\n");
+  printf("resizeGL...\n");
   glViewport(0, 0, w, h);
   // update();
 }
@@ -302,6 +335,24 @@ void OGLWidget::keyPressEvent(QKeyEvent *event)
   if (event->key() == Qt::Key_O)
   {
     fov -= 1.0f;
+    update();
+  }
+  if (event->key() == Qt::Key_Plus)
+  {
+    if (mixValue >= 1.0)
+      mixValue = 1.0;
+    else
+      mixValue += 0.01;
+    printf("mixValue: %f\n", mixValue);
+    update();
+  }
+  if (event->key() == Qt::Key_Minus)
+  {
+    if (mixValue <= 0.0)
+      mixValue = 0.0;
+    else
+      mixValue -= 0.01;
+    printf("mixValue: %f\n", mixValue);
     update();
   }
   // Model rotation

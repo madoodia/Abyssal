@@ -17,7 +17,9 @@
     "qwidget": "cpp",
     "qgroupbox": "cpp",
     "qlineedit": "cpp",
-    "qslider": "cpp"
+    "qslider": "cpp",
+    "qtoolbutton": "cpp",
+    "qpushbutton": "cpp"
   },
   "editor.formatOnSave": true,
   "files.autoSave": "onFocusChange",

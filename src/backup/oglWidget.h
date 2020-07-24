@@ -10,7 +10,6 @@
 #include <cmath>
 #include <iostream>
 #include <stdlib.h>
-#include <vector>
 
 // Third Party Headers
 #include <GL/glew.h>
@@ -60,9 +59,11 @@ protected:
   bool event(QEvent *event) override;
 
 private:
-  unsigned int vao, vbo, ibo, ebo, shaderProgram;
+  unsigned int vao, vbo, ebo, shaderProgram;
+  unsigned int texture1, texture2;
   unsigned int modelLocation, projectionLocation, viewLocation;
 
+  float mixValue;
   float xRot, yRot, zRot, fov;
   float xvRot, yvRot, zvRot;
   float xPan, yPan, zPan;
@@ -92,10 +93,6 @@ private:
 
   QTime t0, t1;
   float interval, nbFrames;
-
-  GLuint length;
-
-  GLfloat pointVertex[3] = {0.0f, 0.0f, 0.0f};
 
   Shader ourShaders;
 };
