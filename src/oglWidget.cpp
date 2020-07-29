@@ -94,7 +94,7 @@ void OGLWidget::initializeGL()
 
 void OGLWidget::paintGL()
 {
-  // printf("paintGL...\n");
+  printf("paintGL...\n");
 
   // t1 = QTime::currentTime();
   // float theoric = 0.001 * interval * nbFrames;
