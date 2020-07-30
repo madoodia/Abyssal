@@ -63,18 +63,15 @@ void OGLWidget::initializeGL()
   // Vertex Data
   vertices = {
       0.0f, 0.0f, 0.0f,
-      1.0f, 0.0f, 0.0f,
-      1.0f, 1.0f, 0.0f,
-      1.0f, 1.0f, 1.0f,
-      2.0f, 2.0f, 2.0f,
-      3.0f, 3.0f, 3.0f,
-      4.0f, 4.0f, 4.0f};
+      0.25f, 0.0f, 0.0f,
+      0.5f, 0.0f, 0.0f,
+      0.75f, 0.0f, 0.0f,
+      1.0f, 0.0f, 0.0f};
 
   glGenVertexArrays(1, &vao);
-  glGenBuffers(1, &vbo);
-
   glBindVertexArray(vao);
 
+  glGenBuffers(1, &vbo);
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
   glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
 
@@ -82,6 +79,7 @@ void OGLWidget::initializeGL()
   glEnableVertexAttribArray(0);
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
+
   glBindVertexArray(0);
 
   ourShaders.use();
