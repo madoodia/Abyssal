@@ -61,9 +61,14 @@ void OGLWidget::initializeGL()
   ourShaders.addShaders("shaders/shader.vs", "shaders/shader.fs");
 
   // Vertex Data
-  float vertices[] = {
+  vertices = {
       0.0f, 0.0f, 0.0f,
-      10.0f, 0.0f, 0.0f};
+      1.0f, 0.0f, 0.0f,
+      1.0f, 1.0f, 0.0f,
+      1.0f, 1.0f, 1.0f,
+      2.0f, 2.0f, 2.0f,
+      3.0f, 3.0f, 3.0f,
+      4.0f, 4.0f, 4.0f};
 
   glGenVertexArrays(1, &vao);
   glGenBuffers(1, &vbo);
@@ -71,7 +76,7 @@ void OGLWidget::initializeGL()
   glBindVertexArray(vao);
 
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
 
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float), (void *)0);
   glEnableVertexAttribArray(0);
@@ -84,7 +89,7 @@ void OGLWidget::initializeGL()
   // Camera
   // < +x
   // ^ -Y
-  cameraPos = glm::vec3(0.0f, -5.0f, 30.0f);
+  cameraPos = glm::vec3(0.0f, -2.0f, 10.0f);
   cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
   cameraDirection = glm::normalize(cameraPos - cameraFront);
   glm::vec3 tempUp(0.0f, 1.0f, 0.0f);
@@ -94,7 +99,7 @@ void OGLWidget::initializeGL()
 
 void OGLWidget::paintGL()
 {
-  printf("paintGL...\n");
+  // printf("paintGL...\n");
 
   // t1 = QTime::currentTime();
   // float theoric = 0.001 * interval * nbFrames;
@@ -137,7 +142,7 @@ void OGLWidget::paintGL()
   glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
 
   // -----------------------------------------------------------------
-
+  /*
   glm::vec3 linePositions[10] = {};
 
   for (int i = 0; i < 11; i++)
@@ -190,6 +195,18 @@ void OGLWidget::paintGL()
   glPointSize(20);
   glEnable(GL_POINT_SMOOTH);
   glDrawArrays(GL_POINTS, 1, 1);
+  glDisable(GL_POINT_SMOOTH);
+  */
+
+  glm::mat4 model = glm::mat4(1.0f);
+  glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
+  glBindVertexArray(vao);
+
+  glPointSize(5);
+  glEnable(GL_POINT_SMOOTH);
+  printf("vertices.size() / 3: %d\n", vertices.size() / 3);
+  glDrawArrays(GL_POINTS, 0, vertices.size() / 3);
+  glDrawArrays(GL_LINE_STRIP, 0, vertices.size() / 3);
   glDisable(GL_POINT_SMOOTH);
 
   glBindVertexArray(0);

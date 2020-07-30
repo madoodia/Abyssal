@@ -95,6 +95,8 @@ private:
 
   GLuint length;
 
+  std::vector<float> vertices;
+
   Shader ourShaders;
 };
 
