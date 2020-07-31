@@ -60,13 +60,24 @@ void OGLWidget::initializeGL()
 
   ourShaders.addShaders("shaders/shader.vs", "shaders/shader.fs");
 
+  // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // Wireframe mode
+
+  // // Vertex Data
+  // vertices = {
+  //     // Position x,y,z
+  //     0.0f, 0.0f, 0.0f,
+  //     0.25f, 0.25f, 0.0f,
+  //     0.5f, 0.5f, 0.0f,
+  //     0.75f, 0.75f, 0.0f,
+  //     1.0f, 1.0f, 0.0f};
+
   // Vertex Data
   vertices = {
-      0.0f, 0.0f, 0.0f,
-      0.25f, 0.0f, 0.0f,
-      0.5f, 0.0f, 0.0f,
-      0.75f, 0.0f, 0.0f,
-      1.0f, 0.0f, 0.0f};
+      // Position x,y,z
+      1.0f, 0.0f, -1.0f,
+      -1.0f, 0.0f, -1.0f,
+      -1.0f, 0.0f, 1.0f,
+      1.0f, 0.0f, 1.0f};
 
   glGenVertexArrays(1, &vao);
   glBindVertexArray(vao);
@@ -75,7 +86,7 @@ void OGLWidget::initializeGL()
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
   glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
 
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float), (void *)0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
   glEnableVertexAttribArray(0);
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -87,7 +98,7 @@ void OGLWidget::initializeGL()
   // Camera
   // < +x
   // ^ -Y
-  cameraPos = glm::vec3(0.0f, -2.0f, 10.0f);
+  cameraPos = glm::vec3(0.0f, -2.0f, 15.0f);
   cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
   cameraDirection = glm::normalize(cameraPos - cameraFront);
   glm::vec3 tempUp(0.0f, 1.0f, 0.0f);
@@ -140,71 +151,17 @@ void OGLWidget::paintGL()
   glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
 
   // -----------------------------------------------------------------
-  /*
-  glm::vec3 linePositions[10] = {};
-
-  for (int i = 0; i < 11; i++)
-  {
-    linePositions[i] = glm::vec3(1.0f * i, 0.0f, 0.0f);
-  }
-
-  glBindVertexArray(vao);
-
-  glm::mat4 model = glm::mat4(1.0f);
-  for (uint i = 0; i < 11; i++)
-  {
-    glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, linePositions[i]);
-    glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
-
-    // glEnable(GL_LINE_SMOOTH);
-    // glLineWidth(3);
-    glDrawArrays(GL_LINE_STRIP, 0, 2);
-    // glDisable(GL_LINE_SMOOTH);
-  }
-
-  glm::vec3 linePositions2[10] = {};
-
-  for (int i = 0; i < 11; i++)
-  {
-    linePositions2[i] = glm::vec3(0.0f, 0.0f, 1.0f * i);
-  }
-  for (uint i = 0; i < 11; i++)
-  {
-    glm::mat4 model2 = glm::mat4(1.0f);
-    model2 = glm::translate(model2, linePositions2[i]);
-    // model2 = glm::rotate(model2, glm::radians(xRot * i * 15), glm::vec3(1.0f, 0.0f, 0.0f));
-    model2 = glm::rotate(model2, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    // model2 = glm::rotate(model2, glm::radians(zRot * i * 15), glm::vec3(0.0f, 0.0f, 1.0f));
-    glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model2));
-
-    // glEnable(GL_LINE_SMOOTH);
-    // glLineWidth(3);
-    glDrawArrays(GL_LINE_STRIP, 0, 2);
-    // glDisable(GL_LINE_SMOOTH);
-  }
-
-  // Origin Point
-  glPointSize(20);
-  glEnable(GL_POINT_SMOOTH);
-  glDrawArrays(GL_POINTS, 0, 1);
-  glDisable(GL_POINT_SMOOTH);
-
-  glPointSize(20);
-  glEnable(GL_POINT_SMOOTH);
-  glDrawArrays(GL_POINTS, 1, 1);
-  glDisable(GL_POINT_SMOOTH);
-  */
 
   glm::mat4 model = glm::mat4(1.0f);
   glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
+
   glBindVertexArray(vao);
 
   glPointSize(5);
   glEnable(GL_POINT_SMOOTH);
-  printf("vertices.size() / 3: %d\n", vertices.size() / 3);
   glDrawArrays(GL_POINTS, 0, vertices.size() / 3);
-  glDrawArrays(GL_LINE_STRIP, 0, vertices.size() / 3);
+  // glDrawArrays(GL_QUADS, 0, vertices.size() / 3);
+  glDrawArrays(GL_LINE_LOOP, 0, vertices.size() / 3);
   glDisable(GL_POINT_SMOOTH);
 
   glBindVertexArray(0);
