@@ -60,7 +60,15 @@ protected:
   bool event(QEvent *event) override;
 
 private:
-  unsigned int vao, vbo, ibo, ebo, shaderProgram;
+  void initGrid();
+  void drawGrid();
+  // void drawPlane();
+  // void drawAxes();
+
+private:
+  unsigned int ibo, ebo, shaderProgram;
+  unsigned int gridVao, gridVbo;
+  unsigned int originVao, originVbo;
   unsigned int modelLocation, projectionLocation, viewLocation;
 
   float xRot, yRot, zRot, fov;
@@ -95,9 +103,15 @@ private:
 
   GLuint length;
 
-  std::vector<float> vertices;
+  // Grid Data
+  std::vector<float> gridVertices;
+  std::vector<float> originPoint;
 
-  Shader ourShaders;
+  // Plane Data
+  std::vector<float> planeVertices;
+
+  Shader gridShaders;
+  Shader planeShaders;
 };
 
 #endif // OGLWIDGET_H

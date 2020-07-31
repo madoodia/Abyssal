@@ -8,6 +8,7 @@
 // Own Headers
 #include "oglWidget.h"
 
+// Constructor & Destructor --------------------
 OGLWidget::OGLWidget(QWidget *parent)
     : xRot(0.0f), yRot(1.0f),
       zRot(0.0f), xvRot(0.0f), yvRot(1.0f),
@@ -32,6 +33,7 @@ OGLWidget::~OGLWidget()
 {
 }
 
+// Overriden Functions -------------------------
 void OGLWidget::initializeGL()
 {
   // printf("initializeGL\n");
@@ -58,42 +60,9 @@ void OGLWidget::initializeGL()
 
   glViewport(0, 0, width(), height());
 
-  ourShaders.addShaders("shaders/shader.vs", "shaders/shader.fs");
-
   // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // Wireframe mode
 
-  // // Vertex Data
-  // vertices = {
-  //     // Position x,y,z
-  //     0.0f, 0.0f, 0.0f,
-  //     0.25f, 0.25f, 0.0f,
-  //     0.5f, 0.5f, 0.0f,
-  //     0.75f, 0.75f, 0.0f,
-  //     1.0f, 1.0f, 0.0f};
-
-  // Vertex Data
-  vertices = {
-      // Position x,y,z
-      1.0f, 0.0f, -1.0f,
-      -1.0f, 0.0f, -1.0f,
-      -1.0f, 0.0f, 1.0f,
-      1.0f, 0.0f, 1.0f};
-
-  glGenVertexArrays(1, &vao);
-  glBindVertexArray(vao);
-
-  glGenBuffers(1, &vbo);
-  glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
-
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
-  glEnableVertexAttribArray(0);
-
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-  glBindVertexArray(0);
-
-  ourShaders.use();
+  initGrid();
 
   // Camera
   // < +x
@@ -108,23 +77,11 @@ void OGLWidget::initializeGL()
 
 void OGLWidget::paintGL()
 {
-  // printf("paintGL...\n");
-
-  // t1 = QTime::currentTime();
-  // float theoric = 0.001 * interval * nbFrames;
-  // float measured = 0.001 * t0.msecsTo(t1);
-  // float diff = (measured - theoric);
-  // deltaTime = diff / measured;
-
-  //printf("CurrentTime: %f\n", currentFrame);
-  //deltaTime = currentFrame - lastFrame;
-  //lastFrame = currentFrame;
-
   glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glEnable(GL_DEPTH_TEST);
 
-  ourShaders.use();
+  drawGrid();
 
   glm::mat4 view(1.0f);
   glm::mat4 projection(1.0f);
@@ -143,9 +100,9 @@ void OGLWidget::paintGL()
 
   projection = glm::perspective(glm::radians(fov), (float)width() / (float)height(), 0.1f, 1000.0f);
 
-  modelLocation = glGetUniformLocation(ourShaders.getID(), "model");
-  viewLocation = glGetUniformLocation(ourShaders.getID(), "view");
-  projectionLocation = glGetUniformLocation(ourShaders.getID(), "projection");
+  modelLocation = glGetUniformLocation(gridShaders.getID(), "model");
+  viewLocation = glGetUniformLocation(gridShaders.getID(), "view");
+  projectionLocation = glGetUniformLocation(gridShaders.getID(), "projection");
 
   glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
   glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
@@ -154,17 +111,6 @@ void OGLWidget::paintGL()
 
   glm::mat4 model = glm::mat4(1.0f);
   glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
-
-  glBindVertexArray(vao);
-
-  glPointSize(5);
-  glEnable(GL_POINT_SMOOTH);
-  glDrawArrays(GL_POINTS, 0, vertices.size() / 3);
-  // glDrawArrays(GL_QUADS, 0, vertices.size() / 3);
-  glDrawArrays(GL_LINE_LOOP, 0, vertices.size() / 3);
-  glDisable(GL_POINT_SMOOTH);
-
-  glBindVertexArray(0);
 
   // -----------------------------------------------------------------
 
@@ -186,6 +132,118 @@ void OGLWidget::resizeGL(int w, int h)
   // update();
 }
 
+// 3D Objects ----------------------------------
+void OGLWidget::initGrid()
+{
+  gridShaders.addShaders("shaders/gridShader.vs", "shaders/gridShader.fs");
+
+  // Grid Vertices
+
+  originPoint = {
+      0.0f, 0.0f, 0.0f};
+
+  gridVertices = {
+      // Position x,y,z
+      // X Direction
+      5.0f, 0.0f, 0.0f,
+      -5.0f, 0.0f, 0.0f,
+
+      5.0f, 0.0f, -1.0f,
+      -5.0f, 0.0f, -1.0f,
+      5.0f, 0.0f, -2.0f,
+      -5.0f, 0.0f, -2.0f,
+      5.0f, 0.0f, -3.0f,
+      -5.0f, 0.0f, -3.0f,
+      5.0f, 0.0f, -4.0f,
+      -5.0f, 0.0f, -4.0f,
+
+      5.0f, 0.0f, 1.0f,
+      -5.0f, 0.0f, 1.0f,
+      5.0f, 0.0f, 2.0f,
+      -5.0f, 0.0f, 2.0f,
+      5.0f, 0.0f, 3.0f,
+      -5.0f, 0.0f, 3.0f,
+      5.0f, 0.0f, 4.0f,
+      -5.0f, 0.0f, 4.0f,
+      // --------------
+      // Z direction
+      0.0f, 0.0f, 5.0f,
+      0.0f, 0.0f, -5.0f,
+
+      -1.0f, 0.0f, 5.0f,
+      -1.0f, 0.0f, -5.0f,
+      -2.0f, 0.0f, 5.0f,
+      -2.0f, 0.0f, -5.0f,
+      -3.0f, 0.0f, 5.0f,
+      -3.0f, 0.0f, -5.0f,
+      -4.0f, 0.0f, 5.0f,
+      -4.0f, 0.0f, -5.0f,
+
+      1.0f, 0.0f, 5.0f,
+      1.0f, 0.0f, -5.0f,
+      2.0f, 0.0f, 5.0f,
+      2.0f, 0.0f, -5.0f,
+      3.0f, 0.0f, 5.0f,
+      3.0f, 0.0f, -5.0f,
+      4.0f, 0.0f, 5.0f,
+      4.0f, 0.0f, -5.0f};
+
+  // Origin Point
+  glGenVertexArrays(1, &originVao);
+  glBindVertexArray(originVao);
+  glGenBuffers(1, &originVbo);
+  glBindBuffer(GL_ARRAY_BUFFER, originVbo);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(float) * originPoint.size(), &originPoint[0], GL_STATIC_DRAW);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+  glEnableVertexAttribArray(0);
+
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindVertexArray(0);
+
+  // Grid
+  glGenVertexArrays(1, &gridVao);
+  glBindVertexArray(gridVao);
+  glGenBuffers(1, &gridVbo);
+  glBindBuffer(GL_ARRAY_BUFFER, gridVbo);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(float) * gridVertices.size(), &gridVertices[0], GL_STATIC_DRAW);
+
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+  glEnableVertexAttribArray(0);
+
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindVertexArray(0);
+
+  gridShaders.use();
+}
+
+void OGLWidget::drawGrid()
+{
+
+  // for (int i = 0; i < 10; ++i)
+  // {
+  //   for (int j = 0; j < 3; ++j)
+  //   {
+  //     gridVertices[(i * 3) + j] =
+  //   }
+  // }
+
+  gridShaders.use();
+  glBindVertexArray(gridVao);
+  // glDrawArrays(GL_QUADS, 0, gridVertices.size() / 3);
+  // glDrawArrays(GL_LINE_LOOP, 0, gridVertices.size() / 3);
+  glDrawArrays(GL_LINES, 0, gridVertices.size() / 3);
+
+  glBindVertexArray(0);
+
+  glBindVertexArray(originVao);
+  glPointSize(5);
+  glEnable(GL_POINT_SMOOTH);
+  glDrawArrays(GL_POINTS, 0, originPoint.size() / 3);
+  glDisable(GL_POINT_SMOOTH);
+  glBindVertexArray(0);
+}
+
+// Events --------------------------------------
 void OGLWidget::closeEvent(QCloseEvent *event)
 {
   printf("The widget is closing...\n");
