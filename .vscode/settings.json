@@ -19,7 +19,8 @@
     "qlineedit": "cpp",
     "qslider": "cpp",
     "qtoolbutton": "cpp",
-    "qpushbutton": "cpp"
+    "qpushbutton": "cpp",
+    "qopenglwidget": "cpp"
   },
   "editor.formatOnSave": true,
   "files.autoSave": "onFocusChange",

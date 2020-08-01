@@ -17,6 +17,7 @@
 
 #include <QtCore/QEvent>
 #include <QtCore/QObject>
+#include <QtCore/QString>
 #include <QtCore/QTime>
 #include <QtCore/Qt>
 #include <QtGui/QCloseEvent>
@@ -35,6 +36,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 // Our Headers
+#include "api.h"
 #include "shader.h"
 
 class OGLWidget : public QOpenGLWidget
@@ -60,16 +62,44 @@ protected:
   bool event(QEvent *event) override;
 
 private:
+  void initOriginPoint();
+  void drawOriginPoint();
+
   void initGrid();
   void drawGrid();
-  // void drawPlane();
+  void gridMVP();
+
+  void initPlane();
+  void drawPlane();
+  void planeMVP();
+
+  float calculateFPS();
+
   // void drawAxes();
 
+public slots:
+  void setPlaneY(float newY);
+
 private:
-  unsigned int ibo, ebo, shaderProgram;
-  unsigned int gridVao, gridVbo;
-  unsigned int originVao, originVbo;
-  unsigned int modelLocation, projectionLocation, viewLocation;
+  uint shaderProgram;
+
+  uint gridVao, gridVbo;
+  uint originVao, originVbo;
+  uint planeVao, planeVbo;
+
+  glm::mat4 view;
+  glm::mat4 projection;
+
+  glm::mat4 gridModel;
+  glm::mat4 planeModel;
+
+  uint gridModelLocation;
+  uint gridViewLocation;
+  uint gridProjectionLocation;
+
+  uint planeModelLocation;
+  uint planeViewLocation;
+  uint planeProjectionLocation;
 
   float xRot, yRot, zRot, fov;
   float xvRot, yvRot, zvRot;
@@ -84,10 +114,6 @@ private:
 
   float cameraSpeed;
 
-  float deltaTime;
-  float lastFrame;
-  float currentFrame;
-
   // mouse
   float xPos, yPos;
   float lastX, lastY;
@@ -97,9 +123,6 @@ private:
   bool firstMouse;
 
   QVector2D mousePos;
-
-  QTime t0, t1;
-  float interval, nbFrames;
 
   GLuint length;
 
@@ -112,6 +135,17 @@ private:
 
   Shader gridShaders;
   Shader planeShaders;
+
+  // FPS Calculation
+  float lastFrameTime;
+  float deltaTime;
+  float lastReportedFPSFrameTime;
+  uint frameCount;
+  float fps;
+  float totalDeltaTime;
+
+  // Test Signal Slots
+  float mNewY;
 };
 
 #endif // OGLWIDGET_H

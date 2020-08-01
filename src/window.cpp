@@ -104,11 +104,15 @@ Window::Window(QMainWindow *parent)
 
   MIntSliderGroup *hairPointsTipMSB = new MIntSliderGroup("Points:", 4, 1000, 1, 1);
 
+  // for test
+  MDoubleSliderGroup *planeYMSB = new MDoubleSliderGroup("High/Low:", -100, 100, 0, 1);
+
   QVBoxLayout *hairPropertiesQVBL = new QVBoxLayout;
   hairPropertiesQVBL->addWidget(hairLengthMSB);
   hairPropertiesQVBL->addLayout(hairsWidthQHBL);
   hairPropertiesQVBL->addLayout(hairsBendQHBL);
   hairPropertiesQVBL->addWidget(hairPointsTipMSB);
+  hairPropertiesQVBL->addWidget(planeYMSB);
   hairPropertiesQVBL->setContentsMargins(1, 1, 1, 1);
 
   hairPropertiesQGB->setLayout(hairPropertiesQVBL);
@@ -169,6 +173,7 @@ Window::Window(QMainWindow *parent)
 
   // Signals to the Viewport
   /* Codes Here*/
+  // connect(planeYMSB, &QDoubleSpinBox::valueChanged, viewport, SLOT(setPlaneY(float)));
   // -----------------------
 
   setWindowTitle("Abyssal");

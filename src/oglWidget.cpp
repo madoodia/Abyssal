@@ -13,16 +13,14 @@ OGLWidget::OGLWidget(QWidget *parent)
     : xRot(0.0f), yRot(1.0f),
       zRot(0.0f), xvRot(0.0f), yvRot(1.0f),
       zvRot(0.0f), xPan(0.0f), yPan(0.0f),
-      zPan(-1.0f), fov(45.0f), cameraSpeed(0.05f),
-      deltaTime(0.1f), lastFrame(0.0f), xPos(0.0f),
+      zPan(-1.0f), fov(45.0f), cameraSpeed(0.05f), xPos(0.0f),
       yPos(0.0f), lastX(0.0f), lastY(0.0f),
       xOffset(0.0f), yOffset(0.0f), sensitivity(0.05f),
       yaw(-90.0f), pitch(0.0f), firstMouse(true),
-      interval(1.0f), nbFrames(100.0f)
+      deltaTime(0.0f), frameCount(0), fps(0.0f),
+      totalDeltaTime(0.0f), mNewY(0.0f)
 {
   // setMouseTracking(true);
-  t0 = QTime::currentTime();
-
   QSurfaceFormat format = QSurfaceFormat::defaultFormat();
   format.setVersion(4, 5);
   format.setProfile(QSurfaceFormat::CoreProfile);
@@ -37,6 +35,9 @@ OGLWidget::~OGLWidget()
 void OGLWidget::initializeGL()
 {
   // printf("initializeGL\n");
+
+  lastFrameTime = (float)QTime::currentTime().msec();
+  lastReportedFPSFrameTime = lastFrameTime;
 
   if (glewInit() != GLEW_OK)
   {
@@ -62,7 +63,14 @@ void OGLWidget::initializeGL()
 
   // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // Wireframe mode
 
+  gridShaders.addShaders("shaders/gridShader.vs", "shaders/gridShader.fs");
   initGrid();
+  initOriginPoint();
+  gridShaders.use();
+
+  planeShaders.addShaders("shaders/planeShader.vs", "shaders/planeShader.fs");
+  initPlane();
+  planeShaders.use();
 
   // Camera
   // < +x
@@ -81,10 +89,8 @@ void OGLWidget::paintGL()
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glEnable(GL_DEPTH_TEST);
 
-  drawGrid();
-
-  glm::mat4 view(1.0f);
-  glm::mat4 projection(1.0f);
+  view = glm::mat4(1.0f);
+  projection = glm::mat4(1.0f);
 
   //glm::vec3 front;
   //front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
@@ -100,29 +106,45 @@ void OGLWidget::paintGL()
 
   projection = glm::perspective(glm::radians(fov), (float)width() / (float)height(), 0.1f, 1000.0f);
 
-  modelLocation = glGetUniformLocation(gridShaders.getID(), "model");
-  viewLocation = glGetUniformLocation(gridShaders.getID(), "view");
-  projectionLocation = glGetUniformLocation(gridShaders.getID(), "projection");
+  drawGrid();
+  drawOriginPoint();
+  gridMVP();
 
-  glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
-  glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
-
-  // -----------------------------------------------------------------
-
-  glm::mat4 model = glm::mat4(1.0f);
-  glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
-
-  // -----------------------------------------------------------------
+  drawPlane();
+  planeMVP();
 
   // Render Text
+  QString fpsStr = "FPS: ";
   QPainter painter(this);
-  painter.beginNativePainting();
+  // painter.beginNativePainting();
   painter.setPen(Qt::white);
   painter.setFont(QFont("Calibri", 12));
   painter.drawText(5, 5, width(), height(), Qt::AlignLeft, "OpenGL Version:");
-  painter.drawText(5, 20, width(), height(), Qt::AlignLeft, "FPS:");
-  painter.drawText(5, 35, width(), height(), Qt::AlignLeft, ("Camera Pos: "));
-  painter.end();
+  painter.drawText(5, 25, width(), height(), Qt::AlignLeft, fpsStr);
+  painter.drawText(5, 45, width(), height(), Qt::AlignLeft, "Camera Pos: ");
+  // painter.end();
+
+  printf("FPS: %d\n", (int)calculateFPS() / 1000.0f);
+
+  // ----------------------------------------------------
+  // QPainter painter(this);
+  // QFont font = painter.font();
+  // font.setPixelSize(48);
+  // painter.setFont(font);
+
+  // const QRect rectangle = QRect(0, 0, 300, 100);
+  // QRect boundingRect;
+  // painter.drawText(rectangle, 0, tr("Hello"), &boundingRect);
+
+  // QPen pen = painter.pen();
+  // pen.setStyle(Qt::DotLine);
+  // painter.setPen(pen);
+  // painter.drawRect(boundingRect.adjusted(0, 0, -pen.width(), -pen.width()));
+
+  // pen.setStyle(Qt::DashLine);
+  // painter.setPen(pen);
+  // painter.drawRect(rectangle.adjusted(0, 0, -pen.width(), -pen.width()));
+  // ----------------------------------------------------
 }
 
 void OGLWidget::resizeGL(int w, int h)
@@ -132,16 +154,40 @@ void OGLWidget::resizeGL(int w, int h)
   // update();
 }
 
-// 3D Objects ----------------------------------
-void OGLWidget::initGrid()
+// 3D Objects & Needed Functions ---------------
+void OGLWidget::initOriginPoint()
 {
-  gridShaders.addShaders("shaders/gridShader.vs", "shaders/gridShader.fs");
-
-  // Grid Vertices
 
   originPoint = {
       0.0f, 0.0f, 0.0f};
 
+  // Origin Point
+  glGenVertexArrays(1, &originVao);
+  glBindVertexArray(originVao);
+  glGenBuffers(1, &originVbo);
+  glBindBuffer(GL_ARRAY_BUFFER, originVbo);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(float) * originPoint.size(), &originPoint[0], GL_STATIC_DRAW);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+  glEnableVertexAttribArray(0);
+
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindVertexArray(0);
+}
+
+void OGLWidget::drawOriginPoint()
+{
+  glBindVertexArray(originVao);
+  glPointSize(5);
+  glEnable(GL_POINT_SMOOTH);
+  glDrawArrays(GL_POINTS, 0, originPoint.size() / 3);
+  glDisable(GL_POINT_SMOOTH);
+  glBindVertexArray(0);
+}
+
+void OGLWidget::initGrid()
+{
+
+  // Grid Vertices
   gridVertices = {
       // Position x,y,z
       // X Direction
@@ -188,18 +234,6 @@ void OGLWidget::initGrid()
       4.0f, 0.0f, 5.0f,
       4.0f, 0.0f, -5.0f};
 
-  // Origin Point
-  glGenVertexArrays(1, &originVao);
-  glBindVertexArray(originVao);
-  glGenBuffers(1, &originVbo);
-  glBindBuffer(GL_ARRAY_BUFFER, originVbo);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(float) * originPoint.size(), &originPoint[0], GL_STATIC_DRAW);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
-  glEnableVertexAttribArray(0);
-
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glBindVertexArray(0);
-
   // Grid
   glGenVertexArrays(1, &gridVao);
   glBindVertexArray(gridVao);
@@ -212,35 +246,115 @@ void OGLWidget::initGrid()
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
-
-  gridShaders.use();
 }
 
 void OGLWidget::drawGrid()
 {
-
-  // for (int i = 0; i < 10; ++i)
-  // {
-  //   for (int j = 0; j < 3; ++j)
-  //   {
-  //     gridVertices[(i * 3) + j] =
-  //   }
-  // }
-
   gridShaders.use();
+
   glBindVertexArray(gridVao);
+
   // glDrawArrays(GL_QUADS, 0, gridVertices.size() / 3);
   // glDrawArrays(GL_LINE_LOOP, 0, gridVertices.size() / 3);
   glDrawArrays(GL_LINES, 0, gridVertices.size() / 3);
 
   glBindVertexArray(0);
+}
 
-  glBindVertexArray(originVao);
-  glPointSize(5);
-  glEnable(GL_POINT_SMOOTH);
-  glDrawArrays(GL_POINTS, 0, originPoint.size() / 3);
-  glDisable(GL_POINT_SMOOTH);
+void OGLWidget::initPlane()
+{
+
+  // Grid Vertices
+
+  planeVertices = {
+      // Position x,y,z
+      1.0f, 0.0f, -1.0f,
+      -1.0f, 0.0f, -1.0f,
+      -1.0f, 0.0f, 1.0f,
+      1.0f, 0.0f, 1.0f};
+
+  // Origin Point
+  glGenVertexArrays(1, &planeVao);
+  glBindVertexArray(planeVao);
+  glGenBuffers(1, &planeVbo);
+  glBindBuffer(GL_ARRAY_BUFFER, planeVbo);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(float) * planeVertices.size(), &planeVertices[0], GL_DYNAMIC_DRAW);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+  glEnableVertexAttribArray(0);
+
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
+}
+
+void OGLWidget::drawPlane()
+{
+
+  planeShaders.use();
+
+  glBindVertexArray(planeVao);
+
+  glLineWidth(20);
+  glEnable(GL_LINE_SMOOTH);
+  glDrawArrays(GL_LINE_LOOP, 0, planeVertices.size() / 3);
+  glDisable(GL_LINE_SMOOTH);
+
+  glBindVertexArray(0);
+}
+
+void OGLWidget::gridMVP()
+{
+  gridModelLocation = glGetUniformLocation(gridShaders.getID(), "model");
+  gridViewLocation = glGetUniformLocation(gridShaders.getID(), "view");
+  gridProjectionLocation = glGetUniformLocation(gridShaders.getID(), "projection");
+
+  glUniformMatrix4fv(gridViewLocation, 1, GL_FALSE, &view[0][0]);
+  glUniformMatrix4fv(gridProjectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
+
+  gridModel = glm::mat4(1.0f);
+  glUniformMatrix4fv(gridModelLocation, 1, GL_FALSE, glm::value_ptr(gridModel));
+}
+
+void OGLWidget::planeMVP()
+{
+  planeModelLocation = glGetUniformLocation(planeShaders.getID(), "model");
+  planeViewLocation = glGetUniformLocation(planeShaders.getID(), "view");
+  planeProjectionLocation = glGetUniformLocation(planeShaders.getID(), "projection");
+
+  glUniformMatrix4fv(planeViewLocation, 1, GL_FALSE, &view[0][0]);
+  glUniformMatrix4fv(planeProjectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
+
+  planeModel = glm::mat4(1.0f);
+  planeModel = glm::translate(planeModel, glm::vec3(0.0f, mNewY, 0.0f));
+  glUniformMatrix4fv(planeModelLocation, 1, GL_FALSE, glm::value_ptr(planeModel));
+}
+
+float OGLWidget::calculateFPS()
+{
+  float frameTime = (float)QTime::currentTime().msec();
+  deltaTime = frameTime - lastFrameTime;
+  lastFrameTime = frameTime;
+  totalDeltaTime += deltaTime;
+
+  ++frameCount;
+
+  if (frameTime - lastReportedFPSFrameTime >= 1.0F)
+  {
+    float averageFrameTime = totalDeltaTime / frameCount;
+    fps = 1 / averageFrameTime;
+
+    // std::cout << "FPS : " << fps << " Frame Time : " << averageFrameTime << std::endl;
+
+    lastReportedFPSFrameTime = frameTime;
+    frameCount = 0;
+    totalDeltaTime = 0.0F;
+  }
+  return fps;
+}
+
+// Slots ---------------------------------------
+void OGLWidget::setPlaneY(float newY)
+{
+  mNewY = newY * -1;
 }
 
 // Events --------------------------------------

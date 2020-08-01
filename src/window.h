@@ -22,8 +22,11 @@ public:
   Window(QMainWindow *parent = nullptr);
   virtual ~Window();
 
-private slots:
+private Q_SLOTS:
   void newFile();
+
+Q_SIGNALS:
+  void planeYChanged(float newY);
 
 protected:
   void
