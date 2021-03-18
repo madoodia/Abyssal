@@ -6,9 +6,9 @@
 // C++ Headers
 
 // Third Party Headers
-#include <QtCore/QFile>
-#include <QtCore/QTextStream>
-#include <QtWidgets/QApplication>
+#include <QApplication>
+#include <QFile>
+#include <QTextStream>
 
 // Our Headers
 #include "window.h"

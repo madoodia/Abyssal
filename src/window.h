@@ -6,12 +6,12 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include <QtWidgets/QDoubleSpinBox>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLineEdit>
-#include <QtWidgets/QMainWindow>
-#include <QtWidgets/QSlider>
-#include <QtWidgets/QSpinBox>
+#include <QDoubleSpinBox>
+#include <QLabel>
+#include <QLineEdit>
+#include <QMainWindow>
+#include <QSlider>
+#include <QSpinBox>
 
 #include "oglWidget.h"
 
@@ -29,8 +29,7 @@ Q_SIGNALS:
   void planeYChanged(float newY);
 
 protected:
-  void
-  closeEvent(QCloseEvent *event) override;
+  void closeEvent(QCloseEvent *event) override;
 
 private:
   void createActions();

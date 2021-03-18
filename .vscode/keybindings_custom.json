@@ -1,92 +1,107 @@
 [
     {
-        "key": "ctrl+alt+q",
-        "command": "workbench.action.tasks.runTask",
-        "args": "qmlscene"
+      "key": "ctrl+alt+q",
+      "command": "workbench.action.tasks.runTask",
+      "args": "qmlscene"
     },
     {
-        "key": "ctrl+alt+r",
-        "command": "workbench.action.tasks.runTask",
-        "args": "run"
+      "key": "ctrl+alt+r",
+      "command": "workbench.action.tasks.runTask",
+      "args": "run"
     },
     {
-        "key": "ctrl+alt+2",
-        "command": "workbench.action.tasks.runTask",
-        "args": "python"
+      "key": "ctrl+alt+2",
+      "command": "workbench.action.tasks.runTask",
+      "args": "python"
     },
     {
-        "key": "ctrl+alt+3",
-        "command": "workbench.action.tasks.runTask",
-        "args": "python3"
+      "key": "ctrl+alt+3",
+      "command": "workbench.action.tasks.runTask",
+      "args": "python3"
     },
     {
-        "key": "ctrl+alt+b",
-        "command": "workbench.action.tasks.runTask",
-        "args": "build"
+      "key": "ctrl+alt+b",
+      "command": "workbench.action.tasks.runTask",
+      "args": "build"
     },
     {
-        "key": "alt+shift+b",
-        "command": "workbench.action.tasks.runTask",
-        "args": "build_vs"
+      "key": "ctrl+alt+c",
+      "command": "workbench.action.tasks.runTask",
+      "args": "clean"
     },
     {
-        "key": "ctrl+u",
-        "command": "editor.action.transformToUppercase"
+      "key": "ctrl+alt+d",
+      "command": "workbench.action.tasks.runTask",
+      "args": "build_debug"
     },
     {
-        "key": "ctrl+l",
-        "command": "editor.action.transformToLowercase"
+      "key": "alt+shift+b",
+      "command": "workbench.action.tasks.runTask",
+      "args": "build_vs"
     },
     {
-        "key": "ctrl+t",
-        "command": "editor.action.transformToTitlecase"
+      "key": "ctrl+shift+q",
+      "command": "workbench.action.tasks.runTask",
+      "args": "qtcreator"
     },
     {
-        "key": "ctrl+]",
-        "command": "-editor.action.indentLines",
-        "when": "editorTextFocus && !editorReadonly"
+      "key": "ctrl+u",
+      "command": "editor.action.transformToUppercase"
     },
     {
-        "key": "ctrl+]",
-        "command": "-markdown.extension.onIndentLines",
-        "when": "editorTextFocus && !suggestWidgetVisible && editorLangId == 'markdown'"
+      "key": "ctrl+l",
+      "command": "editor.action.transformToLowercase"
     },
     {
-        "key": "ctrl+]",
-        "command": "workbench.action.zoomIn"
+      "key": "ctrl+t",
+      "command": "editor.action.transformToTitlecase"
     },
     {
-        "key": "ctrl+=",
-        "command": "-workbench.action.zoomIn"
+      "key": "ctrl+]",
+      "command": "-editor.action.indentLines",
+      "when": "editorTextFocus && !editorReadonly"
     },
     {
-        "key": "ctrl+[",
-        "command": "workbench.action.zoomOut"
+      "key": "ctrl+]",
+      "command": "-markdown.extension.onIndentLines",
+      "when": "editorTextFocus && !suggestWidgetVisible && editorLangId == 'markdown'"
     },
     {
-        "key": "ctrl+-",
-        "command": "-workbench.action.zoomOut"
+      "key": "ctrl+]",
+      "command": "workbench.action.zoomIn"
     },
     {
-        "key": "ctrl+=",
-        "command": "editor.action.fontZoomIn"
+      "key": "ctrl+=",
+      "command": "-workbench.action.zoomIn"
     },
     {
-        "key": "ctrl+-",
-        "command": "editor.action.fontZoomOut"
+      "key": "ctrl+[",
+      "command": "workbench.action.zoomOut"
     },
     {
-        "key": "ctrl+f7",
-        "command": "workbench.action.tasks.runTask"
+      "key": "ctrl+-",
+      "command": "-workbench.action.zoomOut"
     },
     {
-        "key": "ctrl+shift+d",
-        "command": "editor.action.copyLinesDownAction",
-        "when": "editorTextFocus && !editorReadonly"
+      "key": "ctrl+=",
+      "command": "editor.action.fontZoomIn"
     },
     {
-        "key": "shift+alt+down",
-        "command": "-editor.action.copyLinesDownAction",
-        "when": "editorTextFocus && !editorReadonly"
+      "key": "ctrl+-",
+      "command": "editor.action.fontZoomOut"
+    },
+    {
+      "key": "ctrl+f7",
+      "command": "workbench.action.tasks.runTask"
+    },
+    {
+      "key": "ctrl+shift+d",
+      "command": "editor.action.copyLinesDownAction",
+      "when": "editorTextFocus && !editorReadonly"
+    },
+    {
+      "key": "shift+alt+down",
+      "command": "-editor.action.copyLinesDownAction",
+      "when": "editorTextFocus && !editorReadonly"
     }
-]
+  ]

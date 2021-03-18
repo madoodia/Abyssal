@@ -1,5 +1,6 @@
 {
   "files.associations": {
+    "*.vssettings": "xml",
     "*.linux": "makefile",
     "*.cl": "opencl",
     "*.nmake": "makefile",
@@ -20,7 +21,9 @@
     "qslider": "cpp",
     "qtoolbutton": "cpp",
     "qpushbutton": "cpp",
-    "qopenglwidget": "cpp"
+    "qopenglwidget": "cpp",
+    "qapplication": "cpp",
+    "qrect": "cpp"
   },
   "editor.formatOnSave": true,
   "files.autoSave": "onFocusChange",

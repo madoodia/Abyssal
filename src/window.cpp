@@ -3,21 +3,21 @@
 /*  All Rights Reserved. */
 /* --------------------- */
 
-#include <QtCore/QRect>
-#include <QtGui/QDoubleValidator>
-#include <QtGui/QIntValidator>
-#include <QtWidgets/QGroupBox>
-#include <QtWidgets/QHBoxLayout>
-#include <QtWidgets/QMenu>
-#include <QtWidgets/QMenuBar>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QRadioButton>
-#include <QtWidgets/QSpinBox>
-#include <QtWidgets/QSplitter>
-#include <QtWidgets/QStatusBar>
-#include <QtWidgets/QToolBar>
-#include <QtWidgets/QToolButton>
-#include <QtWidgets/QWidget>
+#include <QDoubleValidator>
+#include <QGroupBox>
+#include <QHBoxLayout>
+#include <QIntValidator>
+#include <QMenu>
+#include <QMenuBar>
+#include <QPushButton>
+#include <QRadioButton>
+#include <QRect>
+#include <QSpinBox>
+#include <QSplitter>
+#include <QStatusBar>
+#include <QToolBar>
+#include <QToolButton>
+#include <QWidget>
 
 #include "window.h"
 
